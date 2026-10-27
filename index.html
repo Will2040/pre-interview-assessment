@@ -28,6 +28,8 @@
   --good-soft: #E1F2E7;
   --bad: #B23F2B;
   --bad-soft: #F8E4DF;
+  --dot: #C3D2CA;
+  --glow: rgba(29, 106, 85, 0.16);
   --display: "Bricolage Grotesque", "Segoe UI", system-ui, sans-serif;
   --body: "Public Sans", "Segoe UI", system-ui, sans-serif;
   --mono: "IBM Plex Mono", ui-monospace, "Cascadia Mono", Consolas, monospace;
@@ -37,14 +39,14 @@
     --bg: #0E1512; --surface: #16201C; --ink: #E4ECE8; --muted: #98AAA2; --line: #2A3732;
     --accent: #5DBF9F; --accent-ink: #0E1512; --accent-soft: #1A322A;
     --amber: #E3A94C; --amber-soft: #3A2C14; --good: #6CC791; --good-soft: #193526;
-    --bad: #E58371; --bad-soft: #3C1F19; color-scheme: dark;
+    --bad: #E58371; --bad-soft: #3C1F19; --dot: #26352F; --glow: rgba(93, 191, 159, 0.13); color-scheme: dark;
   }
 }
 :root[data-theme="dark"] {
   --bg: #0E1512; --surface: #16201C; --ink: #E4ECE8; --muted: #98AAA2; --line: #2A3732;
   --accent: #5DBF9F; --accent-ink: #0E1512; --accent-soft: #1A322A;
   --amber: #E3A94C; --amber-soft: #3A2C14; --good: #6CC791; --good-soft: #193526;
-  --bad: #E58371; --bad-soft: #3C1F19; color-scheme: dark;
+  --bad: #E58371; --bad-soft: #3C1F19; --dot: #26352F; --glow: rgba(93, 191, 159, 0.13); color-scheme: dark;
 }
 * { box-sizing: border-box; }
 body { background: var(--bg); color: var(--ink); font-family: var(--body); font-size: 15.5px; line-height: 1.55; }
@@ -53,7 +55,7 @@ h1, h2, h3 { font-family: var(--display); line-height: 1.15; text-wrap: balance;
 h1 { font-size: clamp(1.7rem, 4.5vw, 2.4rem); font-weight: 700; letter-spacing: -0.01em; }
 h2 { font-size: 1.4rem; font-weight: 700; }
 h3 { font-size: 1.08rem; font-weight: 600; }
-p { margin: 0; }
+p { margin: 0; text-wrap: pretty; }
 .mono { font-family: var(--mono); font-variant-numeric: tabular-nums; }
 .eyebrow { font-family: var(--mono); font-size: 0.74rem; letter-spacing: 0.09em; text-transform: uppercase; color: var(--muted); font-weight: 600; }
 .muted { color: var(--muted); }
@@ -65,7 +67,9 @@ p { margin: 0; }
 .brand { display: flex; align-items: baseline; gap: 10px; min-width: 0; }
 .brand b { font-family: var(--display); font-size: 1.02rem; }
 .steps { display: flex; gap: 4px; list-style: none; margin: 0; padding: 0; flex-wrap: wrap; }
-.steps li { font-family: var(--mono); font-size: 0.72rem; padding: 3px 8px; border-radius: 4px; color: var(--muted); border: 1px solid var(--line); white-space: nowrap; }
+.steps li { display: inline-flex; gap: 5px; font-family: var(--mono); font-size: 0.72rem; padding: 3px 8px; border-radius: 4px; color: var(--muted); border: 1px solid var(--line); white-space: nowrap; transition: background-color 0.2s, color 0.2s; }
+.meter { height: 3px; }
+.meter i { display: block; height: 100%; background: var(--accent); transform-origin: left; transform: scaleX(0); transition: transform 0.5s cubic-bezier(0.2, 0.7, 0.2, 1); }
 .steps li.done { color: var(--accent); border-color: var(--accent-soft); background: var(--accent-soft); }
 .steps li.now { color: var(--accent-ink); background: var(--accent); border-color: var(--accent); }
 .timer { font-family: var(--mono); font-weight: 600; font-size: 1rem; padding: 4px 10px; border-radius: 6px; background: var(--accent-soft); color: var(--accent); font-variant-numeric: tabular-nums; }
@@ -76,15 +80,13 @@ main { padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: m
 .lede { font-size: 1.05rem; max-width: 64ch; }
 .card { background: var(--surface); border: 1px solid var(--line); border-radius: 10px; padding: 20px; display: flex; flex-direction: column; gap: 14px; min-width: 0; }
 .grid2 { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 14px; }
-.parts { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 10px; }
-.part { border: 1px solid var(--line); border-radius: 8px; padding: 12px; display: flex; flex-direction: column; gap: 4px; }
-.part .mono { font-size: 0.78rem; color: var(--accent); }
 label.field { display: flex; flex-direction: column; gap: 6px; font-weight: 600; font-size: 0.92rem; }
-input[type=text], textarea { font: inherit; font-weight: 400; color: var(--ink); background: var(--bg); border: 1px solid var(--line); border-radius: 6px; padding: 9px 11px; width: 100%; }
+input[type=text], textarea { font: inherit; font-size: 16px; font-weight: 400; color: var(--ink); background: var(--bg); border: 1px solid var(--line); border-radius: 6px; padding: 9px 11px; width: 100%; }
 textarea { min-height: 96px; resize: vertical; }
 input[type=text]:focus, textarea:focus { outline: 2px solid var(--accent); outline-offset: 1px; }
 .chips { display: grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); gap: 8px; }
-.chip { display: flex; gap: 10px; align-items: flex-start; border: 1px solid var(--line); border-radius: 8px; padding: 10px 12px; cursor: pointer; }
+.chip { display: flex; gap: 10px; align-items: flex-start; border: 1px solid var(--line); border-radius: 8px; padding: 10px 12px; cursor: pointer; transition: border-color 0.15s, background-color 0.15s; }
+.chip:hover { border-color: var(--accent); }
 .chip:has(input:checked) { border-color: var(--accent); background: var(--accent-soft); }
 .chip input { margin-top: 4px; accent-color: var(--accent); }
 .chip span { display: flex; flex-direction: column; font-size: 0.9rem; }
@@ -96,6 +98,11 @@ button.quiet { background: transparent; border-color: var(--line); color: var(--
 button.danger { background: var(--bad); border-color: var(--bad); color: var(--surface); }
 button:focus-visible { outline: 3px solid var(--amber); outline-offset: 2px; }
 button:disabled { opacity: 0.55; cursor: progress; }
+button, a.btnlink { transition: background-color 0.15s, color 0.15s, border-color 0.15s, transform 0.15s, box-shadow 0.15s; }
+button:not(.ghost):not(.quiet):not(:disabled):hover, a.btnlink:hover { transform: translateY(-1px); box-shadow: 0 8px 20px -10px var(--accent); }
+button.ghost:hover { background: var(--accent-soft); }
+button.quiet:hover { border-color: var(--muted); color: var(--ink); }
+button:active, a.btnlink:active { transform: translateY(0); box-shadow: none; }
 a.btnlink { display: inline-block; font-weight: 600; text-decoration: none; border-radius: 7px; padding: 10px 18px; border: 1px solid var(--accent); background: var(--accent); color: var(--accent-ink); }
 a.btnlink:focus-visible { outline: 3px solid var(--amber); outline-offset: 2px; }
 .msg { font-size: 0.9rem; color: var(--bad); }
@@ -108,11 +115,14 @@ a.btnlink:focus-visible { outline: 3px solid var(--amber); outline-offset: 2px; 
 .item p { font-weight: 500; }
 .item .num { font-family: var(--mono); color: var(--muted); font-size: 0.8rem; margin-right: 8px; }
 .scale { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 6px; }
-.opt { position: relative; display: flex; align-items: center; justify-content: center; text-align: center; min-height: 44px; padding: 6px 4px; border: 1px solid var(--line); border-radius: 6px; font-size: 0.78rem; line-height: 1.2; cursor: pointer; color: var(--muted); }
+.opt { position: relative; display: flex; align-items: center; justify-content: center; text-align: center; min-height: 46px; padding: 6px 4px; border: 1px solid var(--line); border-radius: 6px; font-size: 0.82rem; line-height: 1.2; cursor: pointer; color: var(--muted); transition: background-color 0.15s, border-color 0.15s, color 0.15s, transform 0.1s; }
+.opt:hover { border-color: var(--accent); color: var(--ink); }
+.opt:active { transform: scale(0.97); }
+.opt .n { display: none; }
 .opt input { position: absolute; opacity: 0; pointer-events: none; }
 .opt:has(input:checked) { background: var(--accent); border-color: var(--accent); color: var(--accent-ink); font-weight: 600; }
 .opt:has(input:focus-visible) { outline: 3px solid var(--amber); outline-offset: 1px; }
-.scale-key { display: flex; justify-content: space-between; font-size: 0.76rem; color: var(--muted); }
+.scale-key { display: none; justify-content: space-between; font-size: 0.8rem; color: var(--muted); }
 
 /* sjt */
 .scenario h3 { display: flex; gap: 10px; align-items: baseline; }
@@ -121,8 +131,22 @@ a.btnlink:focus-visible { outline: 3px solid var(--amber); outline-offset: 2px; 
 .sjt th { font-family: var(--mono); font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.06em; color: var(--muted); font-weight: 600; text-align: center; padding: 6px 4px; }
 .sjt th:first-child { text-align: left; }
 .sjt td { border-top: 1px solid var(--line); padding: 10px 4px; vertical-align: top; }
-.sjt td.pick { width: 64px; text-align: center; vertical-align: middle; }
-.sjt input { width: 20px; height: 20px; accent-color: var(--accent); cursor: pointer; }
+.sjt th.most { color: var(--good); }
+.sjt th.least { color: var(--bad); }
+.sjt td.pick { width: 64px; padding: 0; vertical-align: middle; }
+.sjt tr { transition: background-color 0.15s; }
+.sjt tr:has(input.most:checked) { background: var(--good-soft); }
+.sjt tr:has(input.least:checked) { background: var(--bad-soft); }
+.sjt td:first-child { padding-left: 8px; }
+.pickl { display: flex; align-items: center; justify-content: center; min-height: 52px; height: 100%; cursor: pointer; }
+.sjt input { appearance: none; -webkit-appearance: none; width: 26px; height: 26px; margin: 0; border: 2px solid var(--line); border-radius: 50%; background: var(--surface); display: grid; place-content: center; cursor: pointer; transition: border-color 0.15s, background-color 0.15s, transform 0.1s; }
+.sjt input::after { content: ""; width: 9px; height: 9px; border-radius: 50%; background: var(--surface); transform: scale(0); transition: transform 0.15s; }
+.pickl:hover input { border-color: var(--accent); }
+.sjt input:active { transform: scale(0.9); }
+.sjt input.most:checked { background: var(--good); border-color: var(--good); }
+.sjt input.least:checked { background: var(--bad); border-color: var(--bad); }
+.sjt input:checked::after { transform: scale(1); }
+.sjt input:focus-visible { outline: 3px solid var(--amber); outline-offset: 2px; }
 
 /* aptitude */
 .tablebox { overflow-x: auto; }
@@ -182,19 +206,91 @@ details summary { cursor: pointer; font-weight: 600; color: var(--accent); }
 .credit { border-top: 1px solid var(--line); background: var(--surface); padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); padding-block: 18px; }
 .credit p { max-width: 780px; margin: 0 auto; font-size: 0.85rem; color: var(--muted); }
 .credit b { color: var(--ink); font-weight: 600; }
-@media (max-width: 520px) {
-  .opt { font-size: 0.7rem; min-height: 48px; }
+/* welcome hero: answer-sheet schedule beside the headline, on a faint dot grid */
+.hero { position: relative; overflow: hidden; background: var(--surface); border-bottom: 1px solid var(--line); padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); padding-block: clamp(36px, 7vw, 88px) clamp(32px, 6vw, 72px); }
+.hero::before { content: ""; position: absolute; inset: 0; background-image: radial-gradient(var(--dot) 1.1px, transparent 1.4px); background-size: 22px 22px; -webkit-mask-image: linear-gradient(to bottom, #000 30%, transparent 95%); mask-image: linear-gradient(to bottom, #000 30%, transparent 95%); pointer-events: none; }
+.hero::after { content: ""; position: absolute; width: 720px; height: 720px; right: -220px; top: -320px; background: radial-gradient(closest-side, var(--glow), transparent); pointer-events: none; }
+.wrap.wide { max-width: 1140px; }
+.wrap.wide > form { max-width: 780px; width: 100%; }
+body[data-wide="true"] .bar-in, body[data-wide="true"] .credit p { max-width: 1140px; }
+.hero-in { position: relative; z-index: 1; max-width: 1140px; margin: 0 auto; display: grid; grid-template-columns: minmax(0, 1.1fr) minmax(0, 0.9fr); gap: clamp(28px, 5vw, 72px); align-items: center; }
+.hero-copy { display: flex; flex-direction: column; gap: 18px; min-width: 0; }
+.hero h1 { font-size: clamp(2.2rem, 5.2vw, 3.7rem); letter-spacing: -0.025em; }
+.hero h1 em { font-style: normal; color: var(--accent); }
+.hero .lede { font-size: clamp(1.02rem, 1.4vw, 1.15rem); color: var(--muted); max-width: 52ch; }
+.schedule { list-style: none; margin: 0; padding: 0; background: var(--bg); border: 1px solid var(--line); border-radius: 12px; min-width: 0; box-shadow: 0 24px 48px -32px var(--glow); }
+.schedule li { display: grid; grid-template-columns: 32px minmax(0, 1fr) auto; gap: 14px; align-items: center; padding: 14px 18px; border-top: 1px dashed var(--line); }
+.schedule li:first-child { border-top: 0; }
+.schedule .k { font-family: var(--mono); width: 30px; height: 30px; border-radius: 50%; display: grid; place-content: center; background: var(--accent-soft); color: var(--accent); font-weight: 600; font-size: 0.82rem; }
+.schedule .end .k { background: var(--accent); color: var(--accent-ink); }
+.schedule b { display: block; font-size: 0.97rem; }
+.schedule small { display: block; color: var(--muted); font-size: 0.84rem; line-height: 1.35; }
+.schedule .t { font-family: var(--mono); font-size: 0.84rem; text-align: right; white-space: nowrap; font-variant-numeric: tabular-nums; }
+.schedule .t em { display: block; font-style: normal; font-size: 0.68rem; color: var(--amber); text-transform: uppercase; letter-spacing: 0.08em; font-weight: 600; }
+.sched-total { display: flex; justify-content: space-between; padding: 10px 18px 0; font-family: var(--mono); font-size: 0.8rem; color: var(--muted); }
+#intro-form, .rsec, .report-head, #sec-download { scroll-margin-top: 110px; }
+
+/* report: sticky contents rail on wide screens, ruled sections instead of stacked cards */
+.wrap.report { max-width: 1140px; display: grid; grid-template-columns: minmax(0, 1fr); gap: 22px; }
+.report-body { display: flex; flex-direction: column; gap: 22px; min-width: 0; }
+.toc { display: none; }
+.rsec { display: flex; flex-direction: column; gap: 14px; padding-top: 30px; border-top: 1px solid var(--line); min-width: 0; }
+@media (min-width: 1100px) {
+  .wrap.report { grid-template-columns: 210px minmax(0, 820px); column-gap: 56px; justify-content: start; align-items: start; }
+  .toc { display: flex; flex-direction: column; position: sticky; top: calc(env(safe-area-inset-top, 0px) + 96px); gap: 2px; padding-top: 6px; }
+  .toc span { font-family: var(--mono); font-size: 0.72rem; letter-spacing: 0.09em; text-transform: uppercase; color: var(--muted); font-weight: 600; padding: 0 12px 8px; }
+  .toc a { color: var(--muted); text-decoration: none; font-size: 0.9rem; padding: 6px 12px; border-left: 2px solid var(--line); transition: color 0.15s, border-color 0.15s; }
+  .toc a:hover { color: var(--ink); }
+  .toc a.on { color: var(--accent); border-left-color: var(--accent); font-weight: 600; }
+  .toc a:focus-visible { outline: 2px solid var(--amber); outline-offset: 2px; }
+}
+
+@media (max-width: 860px) {
+  .hero-in { grid-template-columns: minmax(0, 1fr); }
+}
+@media (max-width: 620px) {
+  .fit thead { display: none; }
+  .fit tr { display: grid; gap: 8px; padding: 14px 0; border-top: 1px solid var(--line); }
+  .fit td { border: 0; padding: 0; }
+}
+@media (max-width: 600px) {
+  .bar-in { gap: 6px 10px; padding-block: 8px; }
+  .brand .who { display: none; }
+  .brand b { font-size: 0.95rem; }
+  .timer { order: 2; margin-left: auto; }
+  .steps { order: 3; width: 100%; }
+  .steps li .l { display: none; }
+  .steps li.now .l { display: inline; }
+}
+@media (max-width: 560px) {
+  .opt .t { display: none; }
+  .opt .n { display: block; font-family: var(--mono); font-size: 1.05rem; font-weight: 600; }
+  .scale-key { display: flex; }
   .card { padding: 16px; }
-  .sjt td.pick { width: 48px; }
+  .sjt td.pick { width: 52px; }
   .plan div { grid-template-columns: 1fr; gap: 2px; }
+  .schedule li { padding: 12px 14px; gap: 12px; }
 }
 @media (prefers-reduced-motion: no-preference) {
-  .wrap { animation: rise 0.25s ease-out; }
-  @keyframes rise { from { transform: translateY(6px); } to { transform: none; } }
+  html { scroll-behavior: smooth; }
+  .wrap { animation: rise 0.3s cubic-bezier(0.2, 0.7, 0.2, 1); }
+  .hero-copy > *, .schedule li { animation: rise 0.6s cubic-bezier(0.2, 0.7, 0.2, 1) both; }
+  .hero-copy > :nth-child(2) { animation-delay: 0.06s; }
+  .hero-copy > :nth-child(3) { animation-delay: 0.12s; }
+  .hero-copy > :nth-child(4) { animation-delay: 0.18s; }
+  .schedule li:nth-child(1) { animation-delay: 0.15s; }
+  .schedule li:nth-child(2) { animation-delay: 0.21s; }
+  .schedule li:nth-child(3) { animation-delay: 0.27s; }
+  .schedule li:nth-child(4) { animation-delay: 0.33s; }
+  .schedule li:nth-child(5) { animation-delay: 0.39s; }
+  .fill { transform-origin: left; animation: grow 0.9s cubic-bezier(0.2, 0.7, 0.2, 1) 0.1s both; }
+  @keyframes rise { from { transform: translateY(10px); } to { transform: none; } }
+  @keyframes grow { from { transform: scaleX(0.15); } to { transform: none; } }
 }
 </style>
 
-<header class="bar"><div class="bar-in" id="bar"></div></header>
+<header class="bar"><div class="bar-in" id="bar"></div><div class="meter" aria-hidden="true"><i id="meter"></i></div></header>
+<section class="hero" id="hero" hidden></section>
 <main><div class="wrap" id="app"></div></main>
 <footer class="credit"><p>Developed by: <b>Prof Willard Emmanuel Tan</b> | &copy; Copyright 2026</p></footer>
 
@@ -391,37 +487,77 @@ function useHandoff() {
 /* ---------- rendering ---------- */
 function renderBar(timerPart) {
   const cur = { intro: -1, A: 0, B: 1, c: 2, d: 3, results: 4 }[state.step];
-  const who = state.profile.name ? `<span class="small muted">${esc(state.profile.name)} <span class="mono">${esc(state.id)}</span></span>` : `<span class="small muted">Graduate selection simulation</span>`;
-  const steps = STEPS.map(([k, l], i) => `<li class="${i < cur ? "done" : i === cur ? "now" : ""}">${k} ${l}</li>`).join("");
+  const who = state.profile.name ? `<span class="small muted who">${esc(state.profile.name)} <span class="mono">${esc(state.id)}</span></span>` : `<span class="small muted who">Graduate selection simulation</span>`;
+  const steps = STEPS.map(([k, l], i) => `<li class="${i < cur ? "done" : i === cur ? "now" : ""}"${i === cur ? ' aria-current="step"' : ""}><span class="k">${k}</span><span class="l">${l}</span></li>`).join("");
   const timer = timerPart ? `<span class="timer" id="timer" aria-live="off">${fmt(remaining(timerPart))}</span>` : "";
   bar.innerHTML = `<div class="brand"><b>Pre-Interview Assessment</b>${who}</div><ol class="steps" aria-label="Sections">${steps}</ol>${timer}`;
 }
 
+const hero = document.getElementById("hero");
 function render() {
   clearInterval(ticker);
+  if (spyIO) { spyIO.disconnect(); spyIO = null; }
   const s = state.step;
+  hero.hidden = s !== "intro";
+  if (s !== "intro") hero.innerHTML = "";
+  app.className = s === "results" ? "wrap report" : s === "intro" ? "wrap wide" : "wrap";
+  document.body.dataset.wide = String(s === "intro" || s === "results");
   if (s === "intro") renderIntro();
   else if (s === "A") renderA();
   else if (s === "B") renderB();
   else if (s === "c" || s === "d") renderTimed(s);
   else renderResults();
+  progress();
+}
+
+function sjtDone() { return SJT.filter((s, i) => state.b[i] && state.b[i].most !== undefined && state.b[i].least !== undefined).length; }
+function progress() {
+  const s = state.step, cnt = k => Object.keys(state[k].answers || {}).length;
+  const p = s === "A" ? Object.keys(state.a).length / 50 * 0.35
+    : s === "B" ? 0.35 + sjtDone() / 8 * 0.25
+    : s === "c" ? 0.6 + cnt("c") / 8 * 0.2
+    : s === "d" ? 0.8 + cnt("d") / 8 * 0.2
+    : s === "results" ? 1 : 0;
+  const m = document.getElementById("meter");
+  if (m) m.style.transform = `scaleX(${p})`;
+}
+
+let spyIO = null;
+function spy() {
+  const links = [...document.querySelectorAll(".toc a")];
+  if (!links.length || !("IntersectionObserver" in window)) return;
+  spyIO = new IntersectionObserver(entries => {
+    entries.forEach(en => { if (en.isIntersecting) links.forEach(l => l.classList.toggle("on", l.getAttribute("href") === "#" + en.target.id)); });
+  }, { rootMargin: "-25% 0px -65% 0px" });
+  links.forEach(l => { const t = document.getElementById(l.getAttribute("href").slice(1)); if (t) spyIO.observe(t); });
 }
 
 function renderIntro() {
   renderBar();
   const p = state.profile;
+  hero.innerHTML = `<div class="hero-in">
+    <div class="hero-copy">
+      <div class="eyebrow">Career Readiness | Online assessment stage</div>
+      <h1>Before your interview: <em>the&nbsp;online assessment</em></h1>
+      <p class="lede">Graduate employers often screen candidates with online tests before they meet them. Complete this one the same way, and leave with a personal career report to bring to your mock&nbsp;interview.</p>
+      <div class="btns"><a class="btnlink" href="#intro-form" data-jump="intro-form">Begin the assessment</a><span class="small muted">Answers stay on your device.</span></div>
+    </div>
+    <div>
+      <ol class="schedule" aria-label="Assessment sections">
+        <li><span class="k">A</span><span><b>Work-style questionnaire</b><small>50 statements, no right or wrong answers</small></span><span class="t">8&nbsp;min</span></li>
+        <li><span class="k">B</span><span><b>Situational judgement</b><small>8 workplace scenarios</small></span><span class="t">12&nbsp;min</span></li>
+        <li><span class="k">C</span><span><b>Numerical reasoning</b><small>8 questions, calculator allowed</small></span><span class="t">10&nbsp;min<em>Timed</em></span></li>
+        <li><span class="k">D</span><span><b>Verbal reasoning</b><small>8 questions on 2 passages</small></span><span class="t">7&nbsp;min<em>Timed</em></span></li>
+        <li class="end"><span class="k">R</span><span><b>Your career report</b><small>Insights, job-fit map and a PDF</small></span><span class="t">PDF</span></li>
+      </ol>
+      <div class="sched-total"><span>Total</span><span>About 37&nbsp;minutes</span></div>
+    </div>
+  </div>`;
   app.innerHTML = `
-  <div class="eyebrow">Career readiness | Online assessment stage</div>
-  <h1>Before your interview: the online assessment</h1>
-  <p class="lede">Many graduate employers ask candidates to complete online assessments before inviting them to interview. This simulation follows the same format. Your results become a personal report with career-development insights, which you can download as a PDF and bring to your mock interview.</p>
-  <div class="parts">
-    <div class="part"><span class="mono">A | about 8 min</span><b>Work-style questionnaire</b><span class="small muted">50 statements. No right or wrong answers.</span></div>
-    <div class="part"><span class="mono">B | about 12 min</span><b>Situational judgement</b><span class="small muted">8 workplace scenarios.</span></div>
-    <div class="part"><span class="mono">C | 10 min timed</span><b>Numerical reasoning</b><span class="small muted">8 questions. Calculator allowed.</span></div>
-    <div class="part"><span class="mono">D | 7 min timed</span><b>Verbal reasoning</b><span class="small muted">8 questions on 2 passages.</span></div>
-  </div>
   <form class="card" id="intro-form" novalidate>
+    <div class="eyebrow">Before you start</div>
     <h2>Your application</h2>
+    <p class="small muted">Use the job you found on LinkedIn. Your report compares your results with what this role asks for.</p>
     <div class="grid2">
       <label class="field" for="f-name">Full name<input type="text" id="f-name" value="${esc(p.name)}" autocomplete="name"></label>
       <label class="field" for="f-prog">Degree programme<input type="text" id="f-prog" value="${esc(p.programme)}" placeholder="e.g. BSc Business Analytics"></label>
@@ -447,7 +583,8 @@ function renderA() {
     const i = start + k;
     return `<div class="item" role="radiogroup" aria-labelledby="ai-${i}">
       <p id="ai-${i}"><span class="num">${String(i + 1).padStart(2, "0")}</span>${esc(itemText(it[0]))}</p>
-      <div class="scale">${SCALE.map((l, v) => `<label class="opt"><input type="radio" name="a-${i}" value="${v + 1}" ${state.a[i] === v + 1 ? "checked" : ""}>${l}</label>`).join("")}</div>
+      <div class="scale">${SCALE.map((l, v) => `<label class="opt"><input type="radio" name="a-${i}" value="${v + 1}" aria-label="${l}" ${state.a[i] === v + 1 ? "checked" : ""}><span class="n" aria-hidden="true">${v + 1}</span><span class="t">${l}</span></label>`).join("")}</div>
+      <div class="scale-key" aria-hidden="true"><span>1 Disagree</span><span>3 Neutral</span><span>5 Agree</span></div>
     </div>`;
   }).join("");
   app.innerHTML = `
@@ -465,7 +602,7 @@ function renderA() {
 function renderB() {
   renderBar();
   app.innerHTML = `
-  <div class="eyebrow">Section B | 8 scenarios</div>
+  <div class="eyebrow">Section B | <span id="b-count">${sjtDone()}</span> of 8 scenarios complete</div>
   <h1>Situational judgement</h1>
   <p class="lede">Imagine you are a graduate in your first year at work. For each scenario, choose the response you think is <b>most</b> effective and the one you think is <b>least</b> effective.</p>
   ${SJT.map((s, i) => {
@@ -473,10 +610,10 @@ function renderB() {
     return `<section class="card scenario">
       <h3><span class="mono">${i + 1}/8</span>${esc(s.title)}</h3>
       <p>${esc(s.text)}</p>
-      <div class="tablebox"><table class="sjt"><thead><tr><th>Response</th><th>Most</th><th>Least</th></tr></thead><tbody>
+      <div class="tablebox"><table class="sjt"><thead><tr><th>Response</th><th class="most">Most</th><th class="least">Least</th></tr></thead><tbody>
       ${s.opts.map((o, j) => `<tr><td>${esc(o)}</td>
-        <td class="pick"><input type="radio" name="b-${i}-most" value="${j}" aria-label="Most effective: option ${j + 1}" ${a.most === j ? "checked" : ""}></td>
-        <td class="pick"><input type="radio" name="b-${i}-least" value="${j}" aria-label="Least effective: option ${j + 1}" ${a.least === j ? "checked" : ""}></td></tr>`).join("")}
+        <td class="pick"><label class="pickl"><input type="radio" class="most" name="b-${i}-most" value="${j}" aria-label="Most effective: ${esc(o)}" ${a.most === j ? "checked" : ""}></label></td>
+        <td class="pick"><label class="pickl"><input type="radio" class="least" name="b-${i}-least" value="${j}" aria-label="Least effective: ${esc(o)}" ${a.least === j ? "checked" : ""}></label></td></tr>`).join("")}
       </tbody></table></div>
     </section>`;
   }).join("")}
@@ -518,7 +655,7 @@ function renderTimed(part) {
         <div class="tfc">${TFC.map((o, j) => `<label class="opt"><input type="radio" name="d-${i}" value="${j}" ${p.answers[i] === j ? "checked" : ""}>${o}</label>`).join("")}</div></div>`).join("")}</div>`).join("");
   }
   app.innerHTML = `<div class="eyebrow">Section ${letter} | Timed</div><h1>${T.label}</h1>${body}
-    <div class="btns"><button type="button" data-act="timed-submit">Submit section ${letter}</button><span class="small muted">You cannot return to this section after submitting.</span></div>`;
+    <div class="btns"><button type="button" data-act="timed-submit">Submit section ${letter}</button><span class="small muted"><span id="t-count" class="mono">${Object.keys(p.answers).length} of ${T.items.length}</span> answered. You cannot return after submitting.</span></div>`;
   ticker = setInterval(() => {
     const left = remaining(part);
     const el = document.getElementById("timer");
@@ -646,9 +783,11 @@ function renderResults() {
   const aptBlock = k => { const r = R.apt[k];
     return `<div><h3>${TIMED[k].label}</h3><p class="mono" style="font-size:1.3rem">${r.correct}/${r.n} <span class="small muted">correct | ${r.attempted} answered | ${fmt(r.used)} of ${fmt(TIMED[k].secs)} used${r.timedOut ? " | time ran out" : ""}</span></p><p>${esc(aptInsight(r))}</p></div>`; };
 
-  app.innerHTML = `
-  ${SAMPLE ? `<section class="card dl"><h2>This is a sample report</h2><p class="small">It was built from example answers so you can see what the assessment produces. Nothing here is saved.</p><div class="btns"><button type="button" data-act="leave-sample">Start your own assessment</button></div></section>` : ""}
-  <section class="report-head">
+  const toc = [["sec-top","Overview"],["sec-download","Download PDF"],["sec-work","Work style"],["sec-fit","Job fit"],["sec-sjt","Judgement"],["sec-apt","Reasoning"],["sec-plan","30-day plan"],["sec-qs","Interview questions"],["sec-reflect","Reflection"]];
+  app.innerHTML = `<nav class="toc" aria-label="Report sections"><span>Your report</span>${toc.map(([id, l], i) => `<a href="#${id}"${i === 0 ? ' class="on"' : ""}>${l}</a>`).join("")}</nav>
+  <div class="report-body">
+  ${SAMPLE ?`<section class="card dl"><h2>This is a sample report</h2><p class="small">It was built from example answers so you can see what the assessment produces. Nothing here is saved.</p><div class="btns"><button type="button" data-act="leave-sample">Start your own assessment</button></div></section>` : ""}
+  <section class="report-head" id="sec-top">
     <div class="eyebrow">Candidate assessment report | ${esc(state.date)}</div>
     <h1>${esc(P.name)}</h1>
     <div class="meta">
@@ -666,34 +805,34 @@ function renderResults() {
     <div class="stat"><span class="eyebrow">Verbal</span><span class="v">${R.apt.d.correct}<small>/8</small></span></div>
   </div>
 
-  <section class="card dl">
+  <section class="card dl" id="sec-download">
     <h2>Download your report</h2>
     <p class="small">Your PDF includes everything below plus a page of interviewer notes. Fill in your reflection first (section 7), because it is included in the PDF. Bring the PDF to your mock interview.</p>
     <div class="btns"><button type="button" data-act="pdf" id="pdf-btn">Download PDF report</button><button type="button" class="ghost" data-act="copy">Copy report as text</button><span class="msg" id="pdf-msg" role="status"></span></div>
   </section>
 
-  <section class="card">
+  <section class="rsec" id="sec-work">
     <div class="eyebrow">1 | Work style</div>
     <h2>Your work-style profile</h2>
     <p class="note">The bar shows your average score from 1 to 5. The dark line marks the average of 10,189 people who took the same questionnaire online. 'Higher' and 'Lower' mean more than half a point from that average. No profile is better than another: what matters is how well you understand yours and can talk about it.</p>
     ${traitRows}
   </section>
 
-  <section class="card">
+  <section class="rsec" id="sec-fit">
     <div class="eyebrow">2 | Job fit</div>
     <h2>Evidence for ${esc(P.role || "your target role")}</h2>
     <p class="small muted">These are the competencies you identified in the job advert, checked against your scenario answers, reasoning scores and work style. 'Build evidence' doesn't mean you lack the competency. It means today's assessment didn't show it, so your interview examples need to.</p>
     <div class="tablebox"><table class="fit"><thead><tr><th>Competency</th><th>Today's evidence</th><th>Interview preparation</th></tr></thead><tbody>${fitRows}</tbody></table></div>
   </section>
 
-  <section class="card">
+  <section class="rsec" id="sec-sjt">
     <div class="eyebrow">3 | Situational judgement</div>
     <h2>${R.sjtTotal} of 16 judgement points</h2>
     <p>You earned a point each time your 'most effective' or 'least effective' choice matched the model answer. ${R.sjtTotal >= 12 ? "Your judgement is closely aligned with what graduate employers typically look for." : R.sjtTotal >= 8 ? "A reasonable result. Read the model answers below and note where your instinct differed." : "Several of your choices differed from what employers typically look for. Reading the reasoning below is the quickest way to improve."}</p>
     <details><summary>Review all 8 scenarios with model answers</summary><div class="review">${sjtReview}</div></details>
   </section>
 
-  <section class="card">
+  <section class="rsec" id="sec-apt">
     <div class="eyebrow">4 | Reasoning</div>
     <h2>Aptitude results</h2>
     <div class="grid2">${aptBlock("c")}${aptBlock("d")}</div>
@@ -701,20 +840,20 @@ function renderResults() {
     <details><summary>Verbal: answers and reasons</summary><div class="review">${verbReview}</div></details>
   </section>
 
-  <section class="card">
+  <section class="rsec" id="sec-plan">
     <div class="eyebrow">5 | Next 30 days</div>
     <h2>Your development plan</h2>
     <div class="plan">${plan(R).map(([w, t]) => `<div><span class="mono">${w}</span><p>${esc(t)}</p></div>`).join("")}</div>
   </section>
 
-  <section class="card">
+  <section class="rsec" id="sec-qs">
     <div class="eyebrow">6 | Interview preparation</div>
     <h2>Questions to prepare for</h2>
     <p class="small muted">Interviewers often use assessment results to decide what to probe. Based on your results, expect questions like these.</p>
     <ol class="qs">${questions(R).map(q => `<li>${esc(q)}</li>`).join("")}</ol>
   </section>
 
-  <section class="card">
+  <section class="rsec" id="sec-reflect">
     <div class="eyebrow">7 | Reflection</div>
     <h2>Make sense of your results</h2>
     <label class="field" for="r1">Which two results best support your application for this role, and why?<textarea id="r1" data-r="r1">${esc(state.reflect.r1)}</textarea></label>
@@ -724,8 +863,10 @@ function renderResults() {
   </section>
 
   <p class="note">About this report: this is a training simulation, not a validated psychometric or selection instrument, and it says nothing about your mental health. Work-style items come from the International Personality Item Pool (IPIP Big-Five Factor Markers, Goldberg 1992), which is in the public domain. The scenarios and reasoning questions were written for this exercise.</p>
-  ${SAMPLE ? "" : `<div class="btns" id="reset-zone"><button type="button" class="quiet" data-act="reset">Start a new attempt</button></div>`}`;
+  ${SAMPLE ? "" : `<div class="btns" id="reset-zone"><button type="button" class="quiet" data-act="reset">Start a new attempt</button></div>`}
+  </div>`;
   useHandoff();
+  spy();
 }
 
 /* ---------- PDF ---------- */
@@ -923,6 +1064,21 @@ app.addEventListener("change", e => {
   else if ((m = n.match(/^([cd])-(\d+)$/))) { if (!state[m[1]].done) state[m[1]].answers[+m[2]] = +t.value; }
   else return;
   save();
+  progress();
+  const bc = document.getElementById("b-count"); if (bc) bc.textContent = sjtDone();
+  const tc = document.getElementById("t-count");
+  if (tc && TIMED[state.step]) tc.textContent = `${Object.keys(state[state.step].answers).length} of ${TIMED[state.step].items.length}`;
+});
+
+// in-page jumps (hero CTA, report contents) scroll without touching the URL hash
+document.addEventListener("click", e => {
+  const j = e.target.closest("a[data-jump], .toc a");
+  if (!j) return;
+  const t = document.getElementById(j.dataset.jump || j.getAttribute("href").slice(1));
+  if (!t) return;
+  e.preventDefault();
+  t.scrollIntoView({ block: "start" });
+  if (j.dataset.jump) { const f = t.querySelector("input"); if (f) setTimeout(() => f.focus({ preventScroll: true }), 450); }
 });
 app.addEventListener("input", e => { const k = e.target.dataset && e.target.dataset.r; if (k) { state.reflect[k] = e.target.value; save(); } });
 
