@@ -1,0 +1,972 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex">
+</head>
+<body>
+<title>Pre-Interview Assessment</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,700&family=Public+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&family=IBM+Plex+Mono:wght@500;600&display=swap">
+<style>
+/* Layout: a single assessment column (max 780px) under a sticky candidate bar; the report widens into labelled bands. */
+:root {
+  --bg: #F2F5F3;
+  --surface: #FFFFFF;
+  --ink: #15201B;
+  --muted: #56675F;
+  --line: #D6DFDA;
+  --accent: #1D6A55;
+  --accent-ink: #FFFFFF;
+  --accent-soft: #E0EEE8;
+  --amber: #A86A12;
+  --amber-soft: #FAEFD9;
+  --good: #23784A;
+  --good-soft: #E1F2E7;
+  --bad: #B23F2B;
+  --bad-soft: #F8E4DF;
+  --display: "Bricolage Grotesque", "Segoe UI", system-ui, sans-serif;
+  --body: "Public Sans", "Segoe UI", system-ui, sans-serif;
+  --mono: "IBM Plex Mono", ui-monospace, "Cascadia Mono", Consolas, monospace;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #0E1512; --surface: #16201C; --ink: #E4ECE8; --muted: #98AAA2; --line: #2A3732;
+    --accent: #5DBF9F; --accent-ink: #0E1512; --accent-soft: #1A322A;
+    --amber: #E3A94C; --amber-soft: #3A2C14; --good: #6CC791; --good-soft: #193526;
+    --bad: #E58371; --bad-soft: #3C1F19; color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #0E1512; --surface: #16201C; --ink: #E4ECE8; --muted: #98AAA2; --line: #2A3732;
+  --accent: #5DBF9F; --accent-ink: #0E1512; --accent-soft: #1A322A;
+  --amber: #E3A94C; --amber-soft: #3A2C14; --good: #6CC791; --good-soft: #193526;
+  --bad: #E58371; --bad-soft: #3C1F19; color-scheme: dark;
+}
+* { box-sizing: border-box; }
+body { background: var(--bg); color: var(--ink); font-family: var(--body); font-size: 15.5px; line-height: 1.55; }
+body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-area-inset-top, 0px); z-index: 10; background: var(--surface); }
+h1, h2, h3 { font-family: var(--display); line-height: 1.15; text-wrap: balance; margin: 0; }
+h1 { font-size: clamp(1.7rem, 4.5vw, 2.4rem); font-weight: 700; letter-spacing: -0.01em; }
+h2 { font-size: 1.4rem; font-weight: 700; }
+h3 { font-size: 1.08rem; font-weight: 600; }
+p { margin: 0; }
+.mono { font-family: var(--mono); font-variant-numeric: tabular-nums; }
+.eyebrow { font-family: var(--mono); font-size: 0.74rem; letter-spacing: 0.09em; text-transform: uppercase; color: var(--muted); font-weight: 600; }
+.muted { color: var(--muted); }
+.small { font-size: 0.88rem; }
+
+/* candidate bar */
+.bar { position: sticky; top: env(safe-area-inset-top, 0px); z-index: 5; background: var(--surface); border-bottom: 1px solid var(--line); padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); }
+.bar-in { max-width: 780px; margin: 0 auto; padding-block: 10px; display: flex; flex-wrap: wrap; align-items: center; gap: 8px 16px; justify-content: space-between; }
+.brand { display: flex; align-items: baseline; gap: 10px; min-width: 0; }
+.brand b { font-family: var(--display); font-size: 1.02rem; }
+.steps { display: flex; gap: 4px; list-style: none; margin: 0; padding: 0; flex-wrap: wrap; }
+.steps li { font-family: var(--mono); font-size: 0.72rem; padding: 3px 8px; border-radius: 4px; color: var(--muted); border: 1px solid var(--line); white-space: nowrap; }
+.steps li.done { color: var(--accent); border-color: var(--accent-soft); background: var(--accent-soft); }
+.steps li.now { color: var(--accent-ink); background: var(--accent); border-color: var(--accent); }
+.timer { font-family: var(--mono); font-weight: 600; font-size: 1rem; padding: 4px 10px; border-radius: 6px; background: var(--accent-soft); color: var(--accent); font-variant-numeric: tabular-nums; }
+.timer.warn { background: var(--amber-soft); color: var(--amber); }
+
+main { padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); padding-block: 28px 64px; }
+.wrap { max-width: 780px; margin: 0 auto; display: flex; flex-direction: column; gap: 22px; }
+.lede { font-size: 1.05rem; max-width: 64ch; }
+.card { background: var(--surface); border: 1px solid var(--line); border-radius: 10px; padding: 20px; display: flex; flex-direction: column; gap: 14px; min-width: 0; }
+.grid2 { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 14px; }
+.parts { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 10px; }
+.part { border: 1px solid var(--line); border-radius: 8px; padding: 12px; display: flex; flex-direction: column; gap: 4px; }
+.part .mono { font-size: 0.78rem; color: var(--accent); }
+label.field { display: flex; flex-direction: column; gap: 6px; font-weight: 600; font-size: 0.92rem; }
+input[type=text], textarea { font: inherit; font-weight: 400; color: var(--ink); background: var(--bg); border: 1px solid var(--line); border-radius: 6px; padding: 9px 11px; width: 100%; }
+textarea { min-height: 96px; resize: vertical; }
+input[type=text]:focus, textarea:focus { outline: 2px solid var(--accent); outline-offset: 1px; }
+.chips { display: grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); gap: 8px; }
+.chip { display: flex; gap: 10px; align-items: flex-start; border: 1px solid var(--line); border-radius: 8px; padding: 10px 12px; cursor: pointer; }
+.chip:has(input:checked) { border-color: var(--accent); background: var(--accent-soft); }
+.chip input { margin-top: 4px; accent-color: var(--accent); }
+.chip span { display: flex; flex-direction: column; font-size: 0.9rem; }
+.chip small { color: var(--muted); }
+.btns { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; }
+button { font: inherit; font-weight: 600; cursor: pointer; border-radius: 7px; padding: 10px 18px; border: 1px solid var(--accent); background: var(--accent); color: var(--accent-ink); }
+button.ghost { background: transparent; color: var(--accent); }
+button.quiet { background: transparent; border-color: var(--line); color: var(--muted); font-weight: 500; }
+button.danger { background: var(--bad); border-color: var(--bad); color: var(--surface); }
+button:focus-visible { outline: 3px solid var(--amber); outline-offset: 2px; }
+button:disabled { opacity: 0.55; cursor: progress; }
+a.btnlink { display: inline-block; font-weight: 600; text-decoration: none; border-radius: 7px; padding: 10px 18px; border: 1px solid var(--accent); background: var(--accent); color: var(--accent-ink); }
+a.btnlink:focus-visible { outline: 3px solid var(--amber); outline-offset: 2px; }
+.msg { font-size: 0.9rem; color: var(--bad); }
+.msg.ok { color: var(--good); }
+.note { font-size: 0.86rem; color: var(--muted); border-left: 3px solid var(--line); padding-left: 12px; }
+
+/* likert */
+.item { display: flex; flex-direction: column; gap: 10px; padding: 14px 0; border-bottom: 1px solid var(--line); }
+.item:last-child { border-bottom: 0; }
+.item p { font-weight: 500; }
+.item .num { font-family: var(--mono); color: var(--muted); font-size: 0.8rem; margin-right: 8px; }
+.scale { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 6px; }
+.opt { position: relative; display: flex; align-items: center; justify-content: center; text-align: center; min-height: 44px; padding: 6px 4px; border: 1px solid var(--line); border-radius: 6px; font-size: 0.78rem; line-height: 1.2; cursor: pointer; color: var(--muted); }
+.opt input { position: absolute; opacity: 0; pointer-events: none; }
+.opt:has(input:checked) { background: var(--accent); border-color: var(--accent); color: var(--accent-ink); font-weight: 600; }
+.opt:has(input:focus-visible) { outline: 3px solid var(--amber); outline-offset: 1px; }
+.scale-key { display: flex; justify-content: space-between; font-size: 0.76rem; color: var(--muted); }
+
+/* sjt */
+.scenario h3 { display: flex; gap: 10px; align-items: baseline; }
+.scenario h3 .mono { font-size: 0.8rem; color: var(--accent); }
+.sjt { width: 100%; border-collapse: collapse; }
+.sjt th { font-family: var(--mono); font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.06em; color: var(--muted); font-weight: 600; text-align: center; padding: 6px 4px; }
+.sjt th:first-child { text-align: left; }
+.sjt td { border-top: 1px solid var(--line); padding: 10px 4px; vertical-align: top; }
+.sjt td.pick { width: 64px; text-align: center; vertical-align: middle; }
+.sjt input { width: 20px; height: 20px; accent-color: var(--accent); cursor: pointer; }
+
+/* aptitude */
+.tablebox { overflow-x: auto; }
+table.data { border-collapse: collapse; width: 100%; font-variant-numeric: tabular-nums; font-size: 0.92rem; }
+table.data caption { text-align: left; font-weight: 600; padding-bottom: 8px; }
+table.data th, table.data td { border: 1px solid var(--line); padding: 7px 10px; text-align: right; }
+table.data th:first-child, table.data td:first-child { text-align: left; }
+table.data thead th { background: var(--accent-soft); font-weight: 600; }
+.mcq { display: grid; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); gap: 6px; }
+.mcq .opt { font-size: 0.88rem; color: var(--ink); }
+.tfc { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 6px; max-width: 420px; }
+.tfc .opt { font-size: 0.88rem; color: var(--ink); }
+.passage { background: var(--bg); border-radius: 8px; padding: 14px 16px; max-width: 70ch; }
+
+/* report */
+.report-head { background: var(--accent); color: var(--accent-ink); border-radius: 12px; padding: 24px; display: flex; flex-direction: column; gap: 14px; }
+.report-head .eyebrow { color: var(--accent-ink); opacity: 0.8; }
+.meta { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 10px 18px; }
+.meta div { display: flex; flex-direction: column; min-width: 0; }
+.meta span { font-size: 0.75rem; opacity: 0.8; font-family: var(--mono); text-transform: uppercase; letter-spacing: 0.06em; }
+.meta b { overflow-wrap: anywhere; }
+.stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 10px; }
+.stat { background: var(--surface); border: 1px solid var(--line); border-radius: 10px; padding: 14px; display: flex; flex-direction: column; gap: 2px; }
+.stat .v { font-family: var(--mono); font-size: 1.6rem; font-weight: 600; font-variant-numeric: tabular-nums; }
+.stat .v small { font-size: 0.9rem; color: var(--muted); }
+.trait { display: flex; flex-direction: column; gap: 10px; padding: 16px 0; border-top: 1px solid var(--line); }
+.trait:first-of-type { border-top: 0; padding-top: 0; }
+.trait-top { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 6px 12px; align-items: baseline; }
+.track { position: relative; height: 12px; border-radius: 6px; background: var(--bg); border: 1px solid var(--line); }
+.fill { position: absolute; inset: 0 auto 0 0; border-radius: 6px; background: var(--accent); }
+.ref { position: absolute; top: -5px; bottom: -5px; width: 2px; background: var(--ink); }
+.ticks { display: flex; justify-content: space-between; font-family: var(--mono); font-size: 0.7rem; color: var(--muted); }
+.pill { font-family: var(--mono); font-size: 0.74rem; font-weight: 600; padding: 2px 9px; border-radius: 999px; white-space: nowrap; }
+.pill.high, .pill.strong { background: var(--good-soft); color: var(--good); }
+.pill.mid, .pill.some { background: var(--amber-soft); color: var(--amber); }
+.pill.low, .pill.build { background: var(--bad-soft); color: var(--bad); }
+.pill.neutral { background: var(--accent-soft); color: var(--accent); }
+.kv { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 12px; }
+.kv div { display: flex; flex-direction: column; gap: 3px; min-width: 0; }
+.kv span { font-size: 0.74rem; font-family: var(--mono); text-transform: uppercase; letter-spacing: 0.06em; color: var(--muted); font-weight: 600; }
+.kv p { font-size: 0.93rem; }
+.fit { width: 100%; border-collapse: collapse; }
+.fit th { text-align: left; font-family: var(--mono); font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.06em; color: var(--muted); padding: 6px 8px; font-weight: 600; }
+.fit td { border-top: 1px solid var(--line); padding: 12px 8px; vertical-align: top; font-size: 0.92rem; }
+.plan { display: flex; flex-direction: column; gap: 0; }
+.plan div { display: grid; grid-template-columns: 74px 1fr; gap: 12px; padding: 12px 0; border-top: 1px solid var(--line); }
+.plan div:first-child { border-top: 0; }
+.plan .mono { color: var(--accent); font-size: 0.82rem; padding-top: 2px; }
+ol.qs { margin: 0; padding-left: 22px; display: flex; flex-direction: column; gap: 8px; }
+details { border-top: 1px solid var(--line); padding-top: 10px; }
+details summary { cursor: pointer; font-weight: 600; color: var(--accent); }
+.review { display: flex; flex-direction: column; gap: 12px; margin-top: 12px; }
+.review > div { font-size: 0.9rem; display: flex; flex-direction: column; gap: 4px; }
+.ok-t { color: var(--good); font-weight: 600; }
+.no-t { color: var(--bad); font-weight: 600; }
+.dl { border: 2px solid var(--accent); }
+.credit { border-top: 1px solid var(--line); background: var(--surface); padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); padding-block: 18px; }
+.credit p { max-width: 780px; margin: 0 auto; font-size: 0.85rem; color: var(--muted); }
+.credit b { color: var(--ink); font-weight: 600; }
+@media (max-width: 520px) {
+  .opt { font-size: 0.7rem; min-height: 48px; }
+  .card { padding: 16px; }
+  .sjt td.pick { width: 48px; }
+  .plan div { grid-template-columns: 1fr; gap: 2px; }
+}
+@media (prefers-reduced-motion: no-preference) {
+  .wrap { animation: rise 0.25s ease-out; }
+  @keyframes rise { from { transform: translateY(6px); } to { transform: none; } }
+}
+</style>
+
+<header class="bar"><div class="bar-in" id="bar"></div></header>
+<main><div class="wrap" id="app"></div></main>
+<footer class="credit"><p>Developed by: <b>Prof Willard Emmanuel Tan</b> | &copy; Copyright 2026</p></footer>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script>
+"use strict";
+/* ---------- content ---------- */
+// IPIP Big-Five Factor Markers, 50 items (Goldberg, 1992). Public domain, ipip.ori.org. [text, trait, key]
+const ITEMS = [
+["Am the life of the party.","E",1],["Feel little concern for others.","A",-1],["Am always prepared.","C",1],["Get stressed out easily.","S",-1],["Have a rich vocabulary.","O",1],
+["Don't talk a lot.","E",-1],["Am interested in people.","A",1],["Leave my belongings around.","C",-1],["Am relaxed most of the time.","S",1],["Have difficulty understanding abstract ideas.","O",-1],
+["Feel comfortable around people.","E",1],["Insult people.","A",-1],["Pay attention to details.","C",1],["Worry about things.","S",-1],["Have a vivid imagination.","O",1],
+["Keep in the background.","E",-1],["Sympathize with others' feelings.","A",1],["Make a mess of things.","C",-1],["Seldom feel blue.","S",1],["Am not interested in abstract ideas.","O",-1],
+["Start conversations.","E",1],["Am not interested in other people's problems.","A",-1],["Get chores done right away.","C",1],["Am easily disturbed.","S",-1],["Have excellent ideas.","O",1],
+["Have little to say.","E",-1],["Have a soft heart.","A",1],["Often forget to put things back in their proper place.","C",-1],["Get upset easily.","S",-1],["Do not have a good imagination.","O",-1],
+["Talk to a lot of different people at parties.","E",1],["Am not really interested in others.","A",-1],["Like order.","C",1],["Change my mood a lot.","S",-1],["Am quick to understand things.","O",1],
+["Don't like to draw attention to myself.","E",-1],["Take time out for others.","A",1],["Shirk my duties.","C",-1],["Have frequent mood swings.","S",-1],["Use difficult words.","O",1],
+["Don't mind being the center of attention.","E",1],["Feel others' emotions.","A",1],["Follow a schedule.","C",1],["Get irritated easily.","S",-1],["Spend time reflecting on things.","O",1],
+["Am quiet around strangers.","E",-1],["Make people feel at ease.","A",1],["Am exacting in my work.","C",1],["Often feel blue.","S",-1],["Am full of ideas.","O",1]
+];
+const SCALE = ["Disagree","Slightly disagree","Neutral","Slightly agree","Agree"];
+const PAGE_SIZE = 10;
+
+// ref = mean item score in an online sample of 10,189 (openpsychometrics.org). Composure is approximate (about 3.0).
+const TRAITS = {
+  E: { name: "Social energy", tech: "Extraversion", ref: 3.05,
+    high: { look: "You probably draw energy from people: meetings, networking and presenting come naturally.", str: "Building relationships quickly, speaking up in groups, client-facing and team-leading work.", watch: "You may dominate discussions or find long stretches of solitary, detailed work draining.", dev: "Practise structured listening: in your next group meeting, summarise two other people's points before adding your own.", probe: "Tell me about a time you had to work alone on a task for a long stretch. How did you stay focused?" },
+    mid: { look: "You can switch between collaborative and independent work as the situation needs.", str: "Flexible across team and solo tasks; you can judge when to speak and when to listen.", watch: "You may show your strengths less visibly than more outgoing peers, so they can be overlooked.", dev: "Choose one visible opportunity this month, such as leading a meeting or presenting a project, to show your range.", probe: "Describe a situation where you stepped forward to lead a group discussion." },
+    low: { look: "You probably prefer focused, independent work and smaller groups.", str: "Deep concentration, thoughtful contributions and careful listening.", watch: "Your ideas may be missed in fast-moving group settings, and networking may take deliberate effort.", dev: "Prepare one point before each meeting and make it in the first ten minutes. Set a small networking goal, such as one new professional conversation a week.", probe: "This role involves regular contact with stakeholders. Tell me about a time you built a working relationship with someone new." } },
+  A: { name: "Cooperation", tech: "Agreeableness", ref: 3.84,
+    high: { look: "You probably value harmony and pay close attention to other people's needs.", str: "A trusted team player; strong at customer care and supporting colleagues.", watch: "You may avoid necessary conflict, find it hard to say no, or take on too much.", dev: "Practise a polite, firm 'no, but': 'I can't take this today, but I can do it on Thursday.'", probe: "Tell me about a time you disagreed with a colleague or manager. What did you do?" },
+    mid: { look: "You balance cooperation with standing your ground.", str: "You can collaborate well and still challenge ideas when it matters.", watch: "Under pressure you may lean too far one way. Notice which way you tend to go.", dev: "Ask a teammate for honest feedback on how you handle disagreement in group work.", probe: "Give an example of when you had to balance helping others with meeting your own deadlines." },
+    low: { look: "You are probably direct, objective and comfortable with debate.", str: "Candid feedback, tough negotiations and resisting groupthink.", watch: "You may come across as blunt or competitive, and others may feel unheard.", dev: "Before you challenge an idea, restate the other person's point first. Ask one more question than you normally would.", probe: "Tell me about a time you had to win support from people who disagreed with you." } },
+  C: { name: "Organisation and drive", tech: "Conscientiousness", ref: 3.38,
+    high: { look: "You probably plan ahead, meet deadlines and pay close attention to detail.", str: "Reliability, organisation and high-quality output.", watch: "You may be perfectionistic, find ambiguity or shifting priorities stressful, or struggle to delegate.", dev: "For one task this month, decide a 'good enough' standard in advance and stop when you reach it.", probe: "Tell me about a time plans changed at the last minute. How did you respond?" },
+    mid: { look: "You are organised when it matters and relaxed when it doesn't.", str: "A workable balance of structure and flexibility.", watch: "Without a system, details can slip when your workload is heavy.", dev: "Adopt one simple system, such as a weekly task list or calendar blocking, and use it for four weeks.", probe: "How do you prioritise when you have several deadlines at once?" },
+    low: { look: "You probably prefer flexibility and spontaneity to fixed plans.", str: "Adaptable, comfortable improvising and quick to respond to change.", watch: "Deadlines, follow-through and detail may suffer, and employers usually weigh reliability heavily.", dev: "Use reminders and a daily top-three list, and ask a peer to check the detail on important work.", probe: "Tell me about a long project you managed to a deadline. How did you keep it on track?" } },
+  S: { name: "Composure", tech: "Emotional stability", ref: 3.0,
+    high: { look: "You probably stay calm under pressure and recover quickly from setbacks.", str: "Steadiness in a crisis, taking criticism well and reassuring others.", watch: "You may underestimate risks, or seem unconcerned when colleagues are stressed.", dev: "When colleagues are under strain, acknowledge it out loud before moving to solutions.", probe: "Tell me about the most stressful situation you have faced and how you handled it." },
+    mid: { look: "You usually manage pressure well, though some situations affect you more than others.", str: "You take concerns seriously without being overwhelmed by them.", watch: "Sustained pressure can build up quietly. Learn your early warning signs.", dev: "Identify two things that help you reset, such as exercise or planning your week, and use them in busy periods.", probe: "Describe a time you received critical feedback. What did you do with it?" },
+    low: { look: "You may feel stress, worry or frustration more intensely than many people.", str: "Alertness to risk, care about getting things right and empathy for others under strain.", watch: "Pressure, criticism or uncertainty may knock your confidence or performance.", dev: "Build routines that reduce uncertainty: prepare early and clarify expectations. Your university's wellbeing service can teach practical stress-management skills.", probe: "Tell me how you handle pressure. Can you give a recent example?" } },
+  O: { name: "Curiosity and ideas", tech: "Intellect / openness", ref: 4.05,
+    high: { look: "You probably enjoy ideas, learning and trying new approaches.", str: "Creative problem-solving, learning quickly and handling abstract thinking.", watch: "Routine may bore you, and you may chase new ideas before finishing current ones.", dev: "Pair each new idea with one concrete next step and a date.", probe: "Tell me about an idea of yours that you actually put into practice. What was the result?" },
+    mid: { look: "You are open to new ideas while valuing what already works.", str: "Practical improvement: making things better step by step.", watch: "You may not show your creative thinking unless someone asks for it.", dev: "Keep a short log of improvements you suggest or make. It becomes ready-made interview evidence.", probe: "Describe a time you improved the way something was done." },
+    low: { look: "You probably prefer practical, proven approaches and concrete tasks.", str: "A grounded, consistent approach that suits operational, rule-based work.", watch: "You may resist change or seem less comfortable with abstract problems.", dev: "Volunteer for one new tool or method each term, and note what you learned from it.", probe: "Tell me about a time you had to learn something completely new, quickly." } }
+};
+const TRAIT_ORDER = ["E","A","C","S","O"];
+const BAND_LABEL = { low: "Lower", mid: "Mid-range", high: "Higher" };
+
+const COMPS = [
+  { id: "team", name: "Teamwork and collaboration", hint: "works well with others, supports the team", sjt: 0, traits: ["A","E"], star: "a time you helped a team deliver despite a difficult teammate or a conflict" },
+  { id: "comm", name: "Communication", hint: "clear writing, presenting, adapting to audiences", sjt: 1, traits: ["E","A"], star: "a time you explained something complex, or adapted your message for a particular audience" },
+  { id: "integ", name: "Integrity and accountability", hint: "honest, owns mistakes, ethical", sjt: 2, traits: ["C","A"], star: "a time you did the right thing when it would have been easier not to" },
+  { id: "cust", name: "Customer and stakeholder focus", hint: "service-minded, client-facing", sjt: 3, traits: ["A","S"], star: "a time you helped a customer, client or user solve a problem" },
+  { id: "resil", name: "Resilience under pressure", hint: "handles stress, setbacks and feedback", sjt: 4, traits: ["S"], star: "a time you recovered from a setback or used criticism to improve" },
+  { id: "plan", name: "Planning and organisation", hint: "prioritises, meets deadlines, detail-oriented", sjt: 5, traits: ["C"], star: "a time you managed several competing deadlines" },
+  { id: "adapt", name: "Adaptability and learning", hint: "embraces change, learns fast", sjt: 6, traits: ["O","S"], star: "a time you adjusted to a major change or learned something new quickly" },
+  { id: "init", name: "Initiative and ownership", hint: "proactive, self-starting, improves things", sjt: 7, traits: ["C","O"], star: "a time you spotted a problem or opportunity and acted on it without being asked" },
+  { id: "anal", name: "Analytical problem-solving", hint: "works with data, numbers, evidence", sjt: null, traits: ["O"], star: "a time you used data or evidence to reach a decision" }
+];
+
+const SJT = [
+  { comp: "team", title: "The missing section", text: "You and three colleagues are preparing a client presentation due on Friday. It is now Wednesday. One teammate, Jamie, has missed the last two check-ins, and their section is still unfinished.",
+    opts: ["Post in the team group chat that Jamie's section is late and the whole team could look bad because of it.", "Message Jamie privately, ask how things are going and whether anything is getting in the way, and agree what can realistically be done by Thursday.", "Quietly complete Jamie's section yourself so the presentation is not put at risk.", "Wait until Thursday. If the section is still unfinished, tell your team lead so the deadline can be managed."],
+    most: 1, least: 0, why: "Speaking to Jamie privately finds out the cause and keeps the relationship intact while protecting the deadline. Calling someone out in a group chat damages trust and rarely fixes the problem. Doing the work yourself hides the issue, and escalating is reasonable only after you have spoken to Jamie." },
+  { comp: "comm", title: "The unread update", text: "You send a weekly project update by email to a senior stakeholder. Last week's update got no reply, and a colleague mentions that the stakeholder finds your updates 'too long to read'.",
+    opts: ["Ask your manager to send the updates instead, since the stakeholder is senior.", "Keep the same format. The stakeholder needs the detail, and reading it is their responsibility.", "Stop sending the updates until someone asks for them.", "Restructure the update with a three-line summary and any decisions needed at the top, and the detail below. Ask the stakeholder briefly whether the new format works for them."],
+    most: 3, least: 2, why: "Good communication adapts to the audience. Leading with the summary and the decisions needed respects a senior reader's time, and checking the format shows you care whether the message lands. Stopping the updates drops a responsibility without telling anyone." },
+  { comp: "integ", title: "The spreadsheet error", text: "Last week you submitted a sales spreadsheet to Finance. You now notice an error that slightly overstates your team's figures. No one else has noticed, and your team lead was pleased with the numbers.",
+    opts: ["Tell your team lead about the error, explain the corrected figure, and offer to send the correction to Finance today.", "Quietly adjust next month's figures so the totals even out over time.", "Email the correction to Finance directly without mentioning it to your team lead.", "Ask a colleague whether it is worth raising, given how small the difference is."],
+    most: 0, least: 1, why: "Owning a mistake quickly and openly is what employers mean by integrity, and your team lead needs to know before anyone relies on the numbers. Adjusting future figures to hide the error turns an honest mistake into deliberate misreporting. Correcting Finance directly is honest but leaves your lead uninformed." },
+  { comp: "cust", title: "The late delivery", text: "You work on a customer service desk. A customer is angry because a delivery promised for today will now arrive in three days. The delay was caused by another department.",
+    opts: ["Explain that the delay was caused by another department, not by you.", "Tell the customer the new date is fixed and there is nothing you can do.", "Acknowledge their frustration, apologise for the inconvenience, check what options exist (such as faster shipping or a partial delivery), and tell them exactly when you will update them.", "Offer a full refund straight away to calm the situation, without checking company policy."],
+    most: 2, least: 1, why: "Customers want to feel heard and to see action. Acknowledging the problem, exploring options and committing to a specific follow-up rebuilds trust. Saying nothing can be done closes the conversation and loses the customer. Blaming another department sounds defensive, and an unauthorised refund may create a new problem." },
+  { comp: "resil", title: "The critical feedback", text: "Your manager reviews your first major report and tells you the analysis is 'too shallow'. It needs to be reworked by next week.",
+    opts: ["Explain that you were not given enough time or guidance for the first draft.", "Ask for a short meeting to understand the specific gaps, and agree what a strong version would include.", "Feel discouraged and ask a colleague to take the report over.", "Rework it on your own, based on your best guess of what your manager meant."],
+    most: 1, least: 2, why: "Resilience means treating criticism as information. Clarifying exactly what 'shallow' means gives you the best chance of success and shows maturity. Handing the work over avoids the learning altogether. Defending yourself may be partly fair, but it rarely changes the outcome." },
+  { comp: "plan", title: "The Monday pile-up", text: "On Monday morning you have three tasks: a report for your manager due on Wednesday; a request from a colleague in another team ('whenever you can, ideally today'); and an urgent request from your manager for data needed at a 2 pm meeting today.",
+    opts: ["Start the Wednesday report first because it is the largest task, and fit the 2 pm data in around it.", "Help your colleague first so they are not kept waiting, then move on to the others.", "Ask your manager to decide the order of all three tasks.", "Prepare the 2 pm data first, tell your colleague when you can realistically help, then block time in your calendar for the Wednesday report."],
+    most: 3, least: 0, why: "Prioritise by deadline and impact: the 2 pm data is both urgent and important. Setting expectations with your colleague is professional, and blocking time protects the report. Starting the largest task first risks missing today's fixed deadline. Asking your manager is not wrong, but these priorities are clear enough to decide yourself." },
+  { comp: "adapt", title: "The new system", text: "Your team is switching to new project-management software next week. Many colleagues are complaining that the old system worked fine.",
+    opts: ["Explore the new tool early, learn its key features, and share tips with colleagues who are struggling.", "Wait for the official training session before looking at it.", "Keep tracking your work in the old system privately until you are forced to switch.", "Ask your manager why the change was made and point out what the old system did well."],
+    most: 0, least: 2, why: "Employers value people who make change easier for others. Learning early and helping colleagues builds your reputation. Running a private parallel system undermines the change and splits information across two places. Asking about the reasons is fair, but on its own it does not move the team forward." },
+  { comp: "init", title: "The two-hour copy job", text: "In your first month, you notice that your team spends about two hours every week copying data by hand between two spreadsheets. No one has asked you to look at it.",
+    opts: ["Say nothing. You are new and it is not your job.", "Replace the process with your own automated version without telling anyone, since it obviously saves time.", "Mention it to your manager, suggest a possible fix, and offer to try it if they agree.", "Bring it up with colleagues over lunch as an example of how inefficient the team is."],
+    most: 2, least: 1, why: "Good initiative means spotting a problem and proposing a fix through the right channel. Your manager may know why the process exists, and their support makes the change stick. Changing a shared process on your own can break things others rely on. Staying silent wastes a chance to add value early." }
+];
+
+const NUM_TABLES = [
+  `<table class="data"><caption>Table 1. Quarterly sales by region, 2025 (SGD thousands)</caption>
+   <thead><tr><th>Region</th><th>Q1</th><th>Q2</th><th>Q3</th><th>Q4</th></tr></thead>
+   <tbody><tr><td>North</td><td>240</td><td>260</td><td>300</td><td>320</td></tr>
+   <tr><td>South</td><td>180</td><td>210</td><td>195</td><td>255</td></tr>
+   <tr><td>East</td><td>150</td><td>165</td><td>180</td><td>225</td></tr>
+   <tr><td>West</td><td>210</td><td>190</td><td>230</td><td>250</td></tr></tbody></table>`,
+  `<table class="data"><caption>Table 2. Staff satisfaction survey, 400 employees</caption>
+   <thead><tr><th>Department</th><th>Employees</th><th>Satisfied</th></tr></thead>
+   <tbody><tr><td>Operations</td><td>160</td><td>55%</td></tr>
+   <tr><td>Sales</td><td>120</td><td>70%</td></tr>
+   <tr><td>Finance</td><td>60</td><td>80%</td></tr>
+   <tr><td>HR</td><td>60</td><td>65%</td></tr></tbody></table>`
+];
+const NUM = [
+  { t: 0, q: "Which region had the largest percentage increase in sales from Q1 to Q4?", opts: ["North","South","East","West","Cannot tell"], ans: 2, work: "Increase divided by Q1: North 80/240 = 33.3%, South 75/180 = 41.7%, East 75/150 = 50.0%, West 40/210 = 19.0%." },
+  { t: 0, q: "What percentage of total Q4 sales came from the North region?", opts: ["28.6%","29.4%","30.5%","31.2%","33.0%"], ans: 2, work: "Q4 total = 320 + 255 + 225 + 250 = 1,050. North share = 320 / 1,050 = 30.5%." },
+  { t: 0, q: "What were the South region's total sales for 2025?", opts: ["SGD 820k","SGD 840k","SGD 855k","SGD 870k","SGD 795k"], ans: 1, work: "180 + 210 + 195 + 255 = 840, so SGD 840k." },
+  { t: 0, q: "If West's sales grow by 12% from Q4 2025 to Q1 2026, what will West's Q1 2026 sales be?", opts: ["SGD 262k","SGD 270k","SGD 288k","SGD 300k","SGD 280k"], ans: 4, work: "250 x 1.12 = 280, so SGD 280k." },
+  { t: 0, q: "What were the East region's average quarterly sales in 2025?", opts: ["SGD 165k","SGD 172.5k","SGD 187.5k","SGD 180k","SGD 195k"], ans: 3, work: "(150 + 165 + 180 + 225) / 4 = 720 / 4 = 180, so SGD 180k." },
+  { t: 1, q: "How many employees in total said they were satisfied?", opts: ["259","247","252","264","270"], ans: 0, work: "Operations 160 x 55% = 88; Sales 120 x 70% = 84; Finance 60 x 80% = 48; HR 60 x 65% = 39. Total 259." },
+  { t: 1, q: "How many more satisfied employees are there in Sales than in Finance?", opts: ["24","30","36","40","48"], ans: 2, work: "Sales 84 minus Finance 48 = 36." },
+  { t: 1, q: "Operations wants 70% of its staff to be satisfied. How many more satisfied employees does it need compared with now?", opts: ["15","20","28","24","32"], ans: 3, work: "Target 160 x 70% = 112. Now 88. Difference 24." }
+];
+const PASSAGES = [
+  { title: "Hybrid work", text: "Since 2020, many organisations have adopted hybrid work arrangements, in which employees split their time between the office and home. Supporters argue that hybrid work improves employee satisfaction and reduces commuting costs. However, some managers report that it is harder to build relationships with new staff when teams are rarely in the same place. A number of firms have responded by setting 'anchor days', on which all members of a team are expected to be in the office. Research findings on productivity are mixed: some studies report gains, while others find no significant difference compared with full-time office work." },
+  { title: "Graduate recruitment", text: "Many large employers now use online assessments early in the graduate recruitment process. These assessments typically include reasoning tests and situational judgement tests, and some employers also use personality questionnaires. Candidates who pass the online stage are usually invited to a video or in-person interview. Employers say the assessments help them handle high application volumes fairly, because every candidate completes the same tasks. Critics point out that candidates with no prior practice may be at a disadvantage, and several careers services now offer practice tests to students." }
+];
+const TFC = ["True","False","Cannot say"];
+const VERB = [
+  { p: 0, s: "Hybrid work means employees work only from home.", ans: 1, why: "The passage defines hybrid work as splitting time between the office and home." },
+  { p: 0, s: "All research shows that hybrid work increases productivity.", ans: 1, why: "The passage says findings are mixed, and some studies find no significant difference." },
+  { p: 0, s: "Hybrid work reduces organisations' office rental costs.", ans: 2, why: "The passage mentions employees' commuting costs, but says nothing about office rental costs." },
+  { p: 0, s: "Some managers find it harder to build relationships with new staff when teams are rarely together.", ans: 0, why: "Stated directly in the third sentence." },
+  { p: 1, s: "Reasoning tests are rarely included in online graduate assessments.", ans: 1, why: "The passage says the assessments typically include reasoning tests." },
+  { p: 1, s: "Candidates who pass the online stage are usually invited to an interview.", ans: 0, why: "Stated directly: they are usually invited to a video or in-person interview." },
+  { p: 1, s: "Practice tests measurably improve candidates' scores.", ans: 2, why: "The passage says careers services offer practice tests, but gives no evidence about their effect on scores." },
+  { p: 1, s: "Employers believe online assessments help them treat candidates consistently.", ans: 0, why: "Employers say the assessments are fair because every candidate completes the same tasks." }
+];
+const TIMED = { c: { label: "Numerical reasoning", secs: 600, items: NUM }, d: { label: "Verbal reasoning", secs: 420, items: VERB } };
+const CREDIT = "Developed by: Prof Willard Emmanuel Tan | © Copyright 2026";
+const STEPS = [["A","Work style"],["B","Judgement"],["C","Numerical"],["D","Verbal"],["R","Report"]];
+
+/* ---------- state ---------- */
+const KEY = "pre-interview-assessment-v1";
+const blank = () => ({ step: "intro", profile: { name: "", programme: "", role: "", company: "", comps: [] }, id: "", date: "", a: {}, aPage: 0, b: {}, c: { answers: {} }, d: { answers: {} }, reflect: { r1: "", r2: "", r3: "" } });
+let state = blank();
+function load() { state = blank(); try { const raw = localStorage.getItem(KEY); if (raw) state = Object.assign(blank(), JSON.parse(raw)); } catch (e) {} }
+load();
+// #sample shows a finished example report (never saved), so instructors and students can preview the output.
+let SAMPLE = location.hash === "#sample";
+if (location.hash.startsWith("#r=")) {
+  try {
+    const s = unpack(location.hash.slice(3));
+    if (s && s.profile && s.step === "results") { state = Object.assign(blank(), s); try { localStorage.setItem(KEY, JSON.stringify(state)); } catch (e) {} }
+  } catch (e) {}
+  try { history.replaceState(null, "", location.pathname + location.search); } catch (e) {}
+}
+function sampleState() {
+  const a = {}; [1,4,2,5,3,1,4,2,5,3,2,5,3,1,4,2,5,3,1,4,3,1,4,2,5,3,1,4,2,5,4,2,5,3,1,4,2,5,3,1,5,3,1,4,2,5,3,1,4,2].forEach((v, i) => a[i] = 6 - v);
+  return Object.assign(blank(), { step: "results", id: "CR-SAMPLE", date: new Date().toLocaleDateString("en-GB", { day: "numeric", month: "long", year: "numeric" }),
+    profile: { name: "Sample Candidate", programme: "BSc Business Analytics", role: "Graduate Data Analyst", company: "Example Logistics", comps: ["team", "comm", "plan", "anal"] },
+    a, b: { 0: { most: 1, least: 0 }, 1: { most: 3, least: 2 }, 2: { most: 0, least: 1 }, 3: { most: 2, least: 1 }, 4: { most: 1, least: 2 }, 5: { most: 0, least: 3 }, 6: { most: 0, least: 2 }, 7: { most: 2, least: 1 } },
+    c: { answers: { 0: 2, 1: 2, 2: 1, 3: 4, 4: 0, 5: 0, 6: 2 }, done: true, used: 412 },
+    d: { answers: { 0: 1, 1: 1, 2: 2, 3: 0, 4: 1, 5: 0, 6: 0, 7: 0 }, done: true, used: 365 },
+    reflect: { r1: "Example: my judgement score (14/16) and numerical result support an analyst role that needs sound decisions with data.", r2: "Example: my Organisation and drive score is mid-range, so I will bring evidence from a project I planned and delivered on time.", r3: "Example: Situation, Task, Action, Result for my strongest competency." } });
+}
+if (SAMPLE) state = sampleState();
+function save() { if (SAMPLE) return; try { localStorage.setItem(KEY, JSON.stringify(state)); } catch (e) {} }
+
+const app = document.getElementById("app");
+const bar = document.getElementById("bar");
+const esc = s => String(s == null ? "" : s).replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+const fmt = s => `${Math.floor(s / 60)}:${String(s % 60).padStart(2, "0")}`;
+const itemText = t => "I " + t.charAt(0).toLowerCase() + t.slice(1);
+let ticker = null;
+
+/* ---------- downloads (claude.ai viewer) ---------- */
+const inViewer = !!(window.claude && typeof window.claude.use === "function");
+const dlReady = inViewer ? window.claude.use("downloads").catch(() => null) : Promise.resolve(undefined);
+// Where downloads are blocked (signed-out visitors to the claude.ai link), the full version takes over, answers carried in the URL hash.
+const FULL_URL = "https://will2040.github.io/pre-interview-assessment/";
+function pack(s) { return btoa(unescape(encodeURIComponent(JSON.stringify(s)))).replace(/\+/g, "-").replace(/\//g, "_").replace(/=+$/, ""); }
+function unpack(h) { return JSON.parse(decodeURIComponent(escape(atob(h.replace(/-/g, "+").replace(/_/g, "/"))))); }
+const handoffUrl = () => SAMPLE ? FULL_URL + "#sample" : FULL_URL + "#r=" + pack(state);
+function useHandoff() {
+  dlReady.then(dl => {
+    if (dl !== null || window.top === window.self || state.step !== "results") return;
+    document.querySelectorAll('button[data-act="pdf"]').forEach(btn => {
+      const a = document.createElement("a");
+      a.className = "btnlink"; a.href = handoffUrl(); a.target = "_blank"; a.rel = "noopener";
+      a.textContent = "Open PDF download page"; a.dataset.handoff = "1";
+      btn.replaceWith(a);
+    });
+    const msg = document.getElementById("pdf-msg");
+    if (msg) { msg.className = "msg ok"; msg.textContent = "This link can't save files directly, so your report opens in a new tab with your answers carried over. Press Download PDF report there."; }
+  });
+}
+
+/* ---------- rendering ---------- */
+function renderBar(timerPart) {
+  const cur = { intro: -1, A: 0, B: 1, c: 2, d: 3, results: 4 }[state.step];
+  const who = state.profile.name ? `<span class="small muted">${esc(state.profile.name)} <span class="mono">${esc(state.id)}</span></span>` : `<span class="small muted">Graduate selection simulation</span>`;
+  const steps = STEPS.map(([k, l], i) => `<li class="${i < cur ? "done" : i === cur ? "now" : ""}">${k} ${l}</li>`).join("");
+  const timer = timerPart ? `<span class="timer" id="timer" aria-live="off">${fmt(remaining(timerPart))}</span>` : "";
+  bar.innerHTML = `<div class="brand"><b>Pre-Interview Assessment</b>${who}</div><ol class="steps" aria-label="Sections">${steps}</ol>${timer}`;
+}
+
+function render() {
+  clearInterval(ticker);
+  const s = state.step;
+  if (s === "intro") renderIntro();
+  else if (s === "A") renderA();
+  else if (s === "B") renderB();
+  else if (s === "c" || s === "d") renderTimed(s);
+  else renderResults();
+}
+
+function renderIntro() {
+  renderBar();
+  const p = state.profile;
+  app.innerHTML = `
+  <div class="eyebrow">Career readiness | Online assessment stage</div>
+  <h1>Before your interview: the online assessment</h1>
+  <p class="lede">Many graduate employers ask candidates to complete online assessments before inviting them to interview. This simulation follows the same format. Your results become a personal report with career-development insights, which you can download as a PDF and bring to your mock interview.</p>
+  <div class="parts">
+    <div class="part"><span class="mono">A | about 8 min</span><b>Work-style questionnaire</b><span class="small muted">50 statements. No right or wrong answers.</span></div>
+    <div class="part"><span class="mono">B | about 12 min</span><b>Situational judgement</b><span class="small muted">8 workplace scenarios.</span></div>
+    <div class="part"><span class="mono">C | 10 min timed</span><b>Numerical reasoning</b><span class="small muted">8 questions. Calculator allowed.</span></div>
+    <div class="part"><span class="mono">D | 7 min timed</span><b>Verbal reasoning</b><span class="small muted">8 questions on 2 passages.</span></div>
+  </div>
+  <form class="card" id="intro-form" novalidate>
+    <h2>Your application</h2>
+    <div class="grid2">
+      <label class="field" for="f-name">Full name<input type="text" id="f-name" value="${esc(p.name)}" autocomplete="name"></label>
+      <label class="field" for="f-prog">Degree programme<input type="text" id="f-prog" value="${esc(p.programme)}" placeholder="e.g. BSc Business Analytics"></label>
+      <label class="field" for="f-role">Job title you applied for<input type="text" id="f-role" value="${esc(p.role)}" placeholder="From your LinkedIn job search"></label>
+      <label class="field" for="f-co">Company<input type="text" id="f-co" value="${esc(p.company)}"></label>
+    </div>
+    <div class="field" style="display:flex;flex-direction:column;gap:8px">
+      <b>Which competencies does the job advert ask for? Choose 3 to 5.</b>
+      <span class="small muted">Read the job description again and match its requirements. Your report will check your results against these.</span>
+      <div class="chips">${COMPS.map(c => `<label class="chip"><input type="checkbox" name="comp" value="${c.id}" id="comp-${c.id}" ${p.comps.includes(c.id) ? "checked" : ""}><span><b>${c.name}</b><small>${c.hint}</small></span></label>`).join("")}</div>
+    </div>
+    <p class="note">This is a training simulation for your Career Readiness module, not a validated selection test. Your answers stay in this browser and are not sent to anyone. Find a quiet place: sections C and D are timed and cannot be paused.</p>
+    <div class="btns"><button type="submit">Start the assessment</button><span class="msg" id="intro-msg" role="alert"></span></div>
+  </form>`;
+}
+
+function renderA() {
+  renderBar();
+  const pages = Math.ceil(ITEMS.length / PAGE_SIZE);
+  const start = state.aPage * PAGE_SIZE;
+  const answered = Object.keys(state.a).length;
+  const rows = ITEMS.slice(start, start + PAGE_SIZE).map((it, k) => {
+    const i = start + k;
+    return `<div class="item" role="radiogroup" aria-labelledby="ai-${i}">
+      <p id="ai-${i}"><span class="num">${String(i + 1).padStart(2, "0")}</span>${esc(itemText(it[0]))}</p>
+      <div class="scale">${SCALE.map((l, v) => `<label class="opt"><input type="radio" name="a-${i}" value="${v + 1}" ${state.a[i] === v + 1 ? "checked" : ""}>${l}</label>`).join("")}</div>
+    </div>`;
+  }).join("");
+  app.innerHTML = `
+  <div class="eyebrow">Section A | Page ${state.aPage + 1} of ${pages} | <span id="a-count">${answered}</span> of 50 answered</div>
+  <h1>Work-style questionnaire</h1>
+  <p class="lede">How accurately does each statement describe you as you generally are now, not as you wish to be? Answer honestly and fairly quickly. Employers look for consistency, so trying to give the 'ideal' answer usually backfires.</p>
+  <div class="card">${rows}</div>
+  <div class="btns">
+    ${state.aPage > 0 ? `<button type="button" class="ghost" data-act="a-back">Previous</button>` : ""}
+    <button type="button" data-act="a-next">${state.aPage < pages - 1 ? "Next page" : "Finish section A"}</button>
+    <span class="msg" id="a-msg" role="alert"></span>
+  </div>`;
+}
+
+function renderB() {
+  renderBar();
+  app.innerHTML = `
+  <div class="eyebrow">Section B | 8 scenarios</div>
+  <h1>Situational judgement</h1>
+  <p class="lede">Imagine you are a graduate in your first year at work. For each scenario, choose the response you think is <b>most</b> effective and the one you think is <b>least</b> effective.</p>
+  ${SJT.map((s, i) => {
+    const a = state.b[i] || {};
+    return `<section class="card scenario">
+      <h3><span class="mono">${i + 1}/8</span>${esc(s.title)}</h3>
+      <p>${esc(s.text)}</p>
+      <div class="tablebox"><table class="sjt"><thead><tr><th>Response</th><th>Most</th><th>Least</th></tr></thead><tbody>
+      ${s.opts.map((o, j) => `<tr><td>${esc(o)}</td>
+        <td class="pick"><input type="radio" name="b-${i}-most" value="${j}" aria-label="Most effective: option ${j + 1}" ${a.most === j ? "checked" : ""}></td>
+        <td class="pick"><input type="radio" name="b-${i}-least" value="${j}" aria-label="Least effective: option ${j + 1}" ${a.least === j ? "checked" : ""}></td></tr>`).join("")}
+      </tbody></table></div>
+    </section>`;
+  }).join("")}
+  <div class="btns"><button type="button" data-act="b-submit">Finish section B</button><span class="msg" id="b-msg" role="alert"></span></div>`;
+}
+
+function remaining(part) {
+  const p = state[part];
+  if (!p.deadline) return TIMED[part].secs;
+  return Math.max(0, Math.round((p.deadline - Date.now()) / 1000));
+}
+
+function renderTimed(part) {
+  const T = TIMED[part], p = state[part];
+  const letter = part.toUpperCase();
+  if (!p.deadline) {
+    renderBar();
+    app.innerHTML = `
+    <div class="eyebrow">Section ${letter} | ${T.items.length} questions | ${T.secs / 60} minutes</div>
+    <h1>${T.label}</h1>
+    ${part === "c"
+      ? `<p class="lede">You will see two data tables and eight questions. Choose the correct answer for each. You may use a calculator and scrap paper.</p>`
+      : `<p class="lede">You will read two short passages. For each statement, decide:</p>
+         <div class="card"><p><b>True</b>: the statement follows from the passage.<br><b>False</b>: the passage contradicts it.<br><b>Cannot say</b>: the passage does not give enough information. Use only what the passage says, not your own knowledge.</p></div>`}
+    <p class="note">The timer starts when you press Start and keeps running if you leave the page. When time runs out, your answers are submitted automatically. Unanswered questions score zero, so keep moving.</p>
+    <div class="btns"><button type="button" data-act="timed-start">Start the ${T.secs / 60}-minute timer</button></div>`;
+    return;
+  }
+  if (remaining(part) <= 0) { finishTimed(part, true); return; }
+  renderBar(part);
+  let body = "";
+  if (part === "c") {
+    body = NUM_TABLES.map((tbl, ti) => `<div class="card"><div class="tablebox">${tbl}</div>
+      ${NUM.map((q, i) => q.t !== ti ? "" : `<div class="item" role="radiogroup" aria-labelledby="cq-${i}"><p id="cq-${i}"><span class="num">Q${i + 1}</span>${esc(q.q)}</p>
+        <div class="mcq">${q.opts.map((o, j) => `<label class="opt"><input type="radio" name="c-${i}" value="${j}" ${p.answers[i] === j ? "checked" : ""}>${esc(o)}</label>`).join("")}</div></div>`).join("")}</div>`).join("");
+  } else {
+    body = PASSAGES.map((ps, pi) => `<div class="card"><h3>Passage ${pi + 1}: ${esc(ps.title)}</h3><p class="passage">${esc(ps.text)}</p>
+      ${VERB.map((q, i) => q.p !== pi ? "" : `<div class="item" role="radiogroup" aria-labelledby="dq-${i}"><p id="dq-${i}"><span class="num">Q${i + 1}</span>${esc(q.s)}</p>
+        <div class="tfc">${TFC.map((o, j) => `<label class="opt"><input type="radio" name="d-${i}" value="${j}" ${p.answers[i] === j ? "checked" : ""}>${o}</label>`).join("")}</div></div>`).join("")}</div>`).join("");
+  }
+  app.innerHTML = `<div class="eyebrow">Section ${letter} | Timed</div><h1>${T.label}</h1>${body}
+    <div class="btns"><button type="button" data-act="timed-submit">Submit section ${letter}</button><span class="small muted">You cannot return to this section after submitting.</span></div>`;
+  ticker = setInterval(() => {
+    const left = remaining(part);
+    const el = document.getElementById("timer");
+    if (el) { el.textContent = fmt(left); el.classList.toggle("warn", left <= 60); }
+    if (left <= 0) finishTimed(part, true);
+  }, 500);
+}
+
+function finishTimed(part, timedOut) {
+  clearInterval(ticker);
+  const p = state[part];
+  if (p.done) return;
+  p.done = true;
+  p.timedOut = !!timedOut;
+  p.used = Math.min(TIMED[part].secs, Math.round((Date.now() - p.startedAt) / 1000));
+  state.step = part === "c" ? "d" : "results";
+  save(); render(); window.scrollTo(0, 0);
+}
+
+/* ---------- scoring ---------- */
+function band(t, m) { const d = m - TRAITS[t].ref; return d < -0.5 ? "low" : d > 0.5 ? "high" : "mid"; }
+const BAND_PTS = { low: 0, mid: 1, high: 2 };
+
+function compute() {
+  const traits = {};
+  TRAIT_ORDER.forEach(t => {
+    let sum = 0, n = 0;
+    ITEMS.forEach((it, i) => { if (it[1] === t && state.a[i]) { sum += it[2] > 0 ? state.a[i] : 6 - state.a[i]; n++; } });
+    const m = n ? sum / n : 3;
+    traits[t] = { mean: m, diff: m - TRAITS[t].ref, band: band(t, m) };
+  });
+  const sjt = SJT.map((s, i) => { const a = state.b[i] || {}; const pts = (a.most === s.most ? 1 : 0) + (a.least === s.least ? 1 : 0); return { pts, most: a.most, least: a.least }; });
+  const sjtTotal = sjt.reduce((x, s) => x + s.pts, 0);
+  const apt = {};
+  ["c", "d"].forEach(k => {
+    const items = TIMED[k].items, ans = state[k].answers || {};
+    const attempted = Object.keys(ans).length;
+    const correct = items.reduce((x, q, i) => x + (ans[i] === q.ans ? 1 : 0), 0);
+    apt[k] = { attempted, correct, n: items.length, used: state[k].used || 0, timedOut: !!state[k].timedOut };
+  });
+  const aptPct = (apt.c.correct + apt.d.correct) / (apt.c.n + apt.d.n);
+  const comps = COMPS.map(c => {
+    const traitPts = c.traits.reduce((x, t) => x + BAND_PTS[traits[t].band], 0) / c.traits.length;
+    let main, source;
+    if (c.sjt === null) { main = aptPct >= 0.75 ? 2 : aptPct >= 0.5 ? 1 : 0; source = `Reasoning tests ${apt.c.correct + apt.d.correct}/16`; }
+    else { main = sjt[c.sjt].pts; source = `Scenario ${c.sjt + 1}: ${main}/2`; }
+    const score = 0.6 * main + 0.4 * traitPts;
+    const status = score >= 1.4 ? "strong" : score >= 0.8 ? "some" : "build";
+    return Object.assign({}, c, { score, status, source, traitNote: c.traits.map(t => `${TRAITS[t].name} ${BAND_LABEL[traits[t].band].toLowerCase()}`).join(", ") });
+  });
+  const ranked = TRAIT_ORDER.slice().sort((x, y) => traits[y].diff - traits[x].diff);
+  const top = ranked.slice(0, 2), grow = ranked[ranked.length - 1];
+  const selected = comps.filter(c => state.profile.comps.includes(c.id));
+  const weakest = selected.slice().sort((x, y) => x.score - y.score)[0] || comps.slice().sort((x, y) => x.score - y.score)[0];
+  const strongest = selected.slice().sort((x, y) => y.score - x.score)[0] || comps.slice().sort((x, y) => y.score - x.score)[0];
+  return { traits, sjt, sjtTotal, apt, aptPct, comps, selected, top, grow, weakest, strongest };
+}
+
+const STATUS_LABEL = { strong: "Strong evidence", some: "Some evidence", build: "Build evidence" };
+function aptInsight(r) {
+  const acc = r.attempted ? r.correct / r.attempted : 0;
+  if (r.attempted < r.n && r.timedOut) return `You answered ${r.attempted} of ${r.n} before time ran out. Speed is your first lever: practise under a timer, skip any question that stalls you, and come back if time allows.`;
+  if (r.attempted < r.n) return `You submitted with ${r.n - r.attempted} unanswered and ${r.correct} of ${r.n} correct. A blank always scores zero, so unless the instructions say wrong answers lose marks, an educated guess is better than leaving a question out.`;
+  if (r.correct === r.n) return "Full marks within the time. Keep the skill sharp with occasional timed practice, and try other formats such as inductive (pattern) reasoning.";
+  if (acc < 0.6) return `You finished in time, but ${r.correct} of ${r.n} were correct. Slow down slightly: reread the question, check which figure a percentage is based on, and check units before choosing.`;
+  return `A solid balance of speed and accuracy (${r.correct}/${r.n}). Review the questions you missed to spot any pattern.`;
+}
+
+function plan(R) {
+  const g = TRAITS[R.grow][R.traits[R.grow].band];
+  const aptLines = [];
+  if (R.apt.c.correct < 7) aptLines.push("numerical");
+  if (R.apt.d.correct < 7) aptLines.push("verbal");
+  const w3 = aptLines.length
+    ? `Complete two timed ${aptLines.join(" and ")} reasoning practice tests from your careers service or a graduate careers website. Note the question types that cost you the most time.`
+    : "Your reasoning scores are strong (7 or more out of 8 on both tests). Try an assessment format you haven't met yet, such as inductive (pattern) reasoning or a game-based assessment, so nothing surprises you in a real application.";
+  return [
+    ["Week 1", `${TRAITS[R.grow].name}: ${g.dev}`],
+    ["Week 2", `Write and rehearse a STAR story about ${R.weakest.star} (${R.weakest.name}). Ask a classmate to challenge it with follow-up questions.`],
+    ["Week 3", w3],
+    ["Week 4", `Update your CV bullet points and LinkedIn About section so they show evidence for ${R.strongest.name.toLowerCase()}, the strength you want this employer to remember.`]
+  ];
+}
+
+function questions(R) {
+  const q = [`Walk me through your CV. Why are you interested in the ${state.profile.role || "role"} position${state.profile.company ? " at " + state.profile.company : ""}?`];
+  R.top.forEach(t => q.push(TRAITS[t][R.traits[t].band].probe));
+  q.push(TRAITS[R.grow][R.traits[R.grow].band].probe);
+  R.selected.filter(c => c.status !== "strong").slice(0, 3).forEach(c => q.push(`Tell me about ${c.star}.`));
+  if (q.length < 6) R.selected.filter(c => c.status === "strong").slice(0, 6 - q.length).forEach(c => q.push(`Tell me about ${c.star}.`));
+  return [...new Set(q)];
+}
+
+/* ---------- report (web) ---------- */
+function renderResults() {
+  renderBar();
+  const R = compute(), P = state.profile;
+  const traitRows = TRAIT_ORDER.map(t => {
+    const T = TRAITS[t], r = R.traits[t], c = T[r.band];
+    const pct = (r.mean - 1) / 4 * 100, refPct = (T.ref - 1) / 4 * 100;
+    return `<div class="trait">
+      <div class="trait-top"><h3>${T.name} <span class="small muted" style="font-family:var(--body);font-weight:400">${T.tech}</span></h3><span class="pill ${r.band}">${BAND_LABEL[r.band]} | ${r.mean.toFixed(1)} / 5</span></div>
+      <div class="track" role="img" aria-label="${T.name}: ${r.mean.toFixed(1)} out of 5; reference average ${T.ref.toFixed(1)}"><div class="fill" style="width:${pct}%"></div><div class="ref" style="left:calc(${refPct}% - 1px)"></div></div>
+      <div class="ticks"><span>1</span><span>2</span><span>3</span><span>4</span><span>5</span></div>
+      <p>${esc(c.look)}</p>
+      <div class="kv"><div><span>Strengths to lead with</span><p>${esc(c.str)}</p></div><div><span>Watch-outs</span><p>${esc(c.watch)}</p></div><div><span>Try this</span><p>${esc(c.dev)}</p></div></div>
+    </div>`;
+  }).join("");
+
+  const fitRows = (R.selected.length ? R.selected : R.comps).map(c => `<tr>
+      <td><b>${c.name}</b><br><span class="small muted">${esc(c.source)}; ${esc(c.traitNote)}</span></td>
+      <td><span class="pill ${c.status}">${STATUS_LABEL[c.status]}</span></td>
+      <td>Prepare a STAR story about ${esc(c.star)}.</td></tr>`).join("");
+
+  const sjtReview = SJT.map((s, i) => { const r = R.sjt[i];
+    return `<div><b>${i + 1}. ${esc(s.title)}</b> <span class="${r.pts === 2 ? "ok-t" : r.pts === 1 ? "" : "no-t"}">${r.pts}/2</span>
+      <span>Best response: ${esc(s.opts[s.most])}</span>
+      <span>Least effective: ${esc(s.opts[s.least])}</span>
+      <span class="muted">${esc(s.why)}</span></div>`; }).join("");
+  const numReview = NUM.map((q, i) => { const a = state.c.answers[i]; const ok = a === q.ans;
+    return `<div><b>Q${i + 1}.</b> ${esc(q.q)} <span class="${ok ? "ok-t" : "no-t"}">${ok ? "Correct" : a === undefined ? "Not answered" : "Incorrect"}</span><span>Answer: ${esc(q.opts[q.ans])}. ${esc(q.work)}</span></div>`; }).join("");
+  const verbReview = VERB.map((q, i) => { const a = state.d.answers[i]; const ok = a === q.ans;
+    return `<div><b>Q${i + 1}.</b> ${esc(q.s)} <span class="${ok ? "ok-t" : "no-t"}">${ok ? "Correct" : a === undefined ? "Not answered" : "Incorrect"}</span><span>Answer: ${TFC[q.ans]}. ${esc(q.why)}</span></div>`; }).join("");
+
+  const aptBlock = k => { const r = R.apt[k];
+    return `<div><h3>${TIMED[k].label}</h3><p class="mono" style="font-size:1.3rem">${r.correct}/${r.n} <span class="small muted">correct | ${r.attempted} answered | ${fmt(r.used)} of ${fmt(TIMED[k].secs)} used${r.timedOut ? " | time ran out" : ""}</span></p><p>${esc(aptInsight(r))}</p></div>`; };
+
+  app.innerHTML = `
+  ${SAMPLE ? `<section class="card dl"><h2>This is a sample report</h2><p class="small">It was built from example answers so you can see what the assessment produces. Nothing here is saved.</p><div class="btns"><button type="button" data-act="leave-sample">Start your own assessment</button></div></section>` : ""}
+  <section class="report-head">
+    <div class="eyebrow">Candidate assessment report | ${esc(state.date)}</div>
+    <h1>${esc(P.name)}</h1>
+    <div class="meta">
+      <div><span>Applying for</span><b>${esc(P.role || "Not stated")}</b></div>
+      <div><span>Company</span><b>${esc(P.company || "Not stated")}</b></div>
+      <div><span>Programme</span><b>${esc(P.programme || "Not stated")}</b></div>
+      <div><span>Candidate ID</span><b class="mono">${esc(state.id)}</b></div>
+    </div>
+  </section>
+
+  <div class="stats">
+    <div class="stat"><span class="eyebrow">Lead with</span><b>${TRAITS[R.top[0]].name}</b><span class="small muted">and ${TRAITS[R.top[1]].name.toLowerCase()}</span></div>
+    <div class="stat"><span class="eyebrow">Judgement</span><span class="v">${R.sjtTotal}<small>/16</small></span></div>
+    <div class="stat"><span class="eyebrow">Numerical</span><span class="v">${R.apt.c.correct}<small>/8</small></span></div>
+    <div class="stat"><span class="eyebrow">Verbal</span><span class="v">${R.apt.d.correct}<small>/8</small></span></div>
+  </div>
+
+  <section class="card dl">
+    <h2>Download your report</h2>
+    <p class="small">Your PDF includes everything below plus a page of interviewer notes. Fill in your reflection first (section 7), because it is included in the PDF. Bring the PDF to your mock interview.</p>
+    <div class="btns"><button type="button" data-act="pdf" id="pdf-btn">Download PDF report</button><button type="button" class="ghost" data-act="copy">Copy report as text</button><span class="msg" id="pdf-msg" role="status"></span></div>
+  </section>
+
+  <section class="card">
+    <div class="eyebrow">1 | Work style</div>
+    <h2>Your work-style profile</h2>
+    <p class="note">The bar shows your average score from 1 to 5. The dark line marks the average of 10,189 people who took the same questionnaire online. 'Higher' and 'Lower' mean more than half a point from that average. No profile is better than another: what matters is how well you understand yours and can talk about it.</p>
+    ${traitRows}
+  </section>
+
+  <section class="card">
+    <div class="eyebrow">2 | Job fit</div>
+    <h2>Evidence for ${esc(P.role || "your target role")}</h2>
+    <p class="small muted">These are the competencies you identified in the job advert, checked against your scenario answers, reasoning scores and work style. 'Build evidence' doesn't mean you lack the competency. It means today's assessment didn't show it, so your interview examples need to.</p>
+    <div class="tablebox"><table class="fit"><thead><tr><th>Competency</th><th>Today's evidence</th><th>Interview preparation</th></tr></thead><tbody>${fitRows}</tbody></table></div>
+  </section>
+
+  <section class="card">
+    <div class="eyebrow">3 | Situational judgement</div>
+    <h2>${R.sjtTotal} of 16 judgement points</h2>
+    <p>You earned a point each time your 'most effective' or 'least effective' choice matched the model answer. ${R.sjtTotal >= 12 ? "Your judgement is closely aligned with what graduate employers typically look for." : R.sjtTotal >= 8 ? "A reasonable result. Read the model answers below and note where your instinct differed." : "Several of your choices differed from what employers typically look for. Reading the reasoning below is the quickest way to improve."}</p>
+    <details><summary>Review all 8 scenarios with model answers</summary><div class="review">${sjtReview}</div></details>
+  </section>
+
+  <section class="card">
+    <div class="eyebrow">4 | Reasoning</div>
+    <h2>Aptitude results</h2>
+    <div class="grid2">${aptBlock("c")}${aptBlock("d")}</div>
+    <details><summary>Numerical: worked answers</summary><div class="review">${numReview}</div></details>
+    <details><summary>Verbal: answers and reasons</summary><div class="review">${verbReview}</div></details>
+  </section>
+
+  <section class="card">
+    <div class="eyebrow">5 | Next 30 days</div>
+    <h2>Your development plan</h2>
+    <div class="plan">${plan(R).map(([w, t]) => `<div><span class="mono">${w}</span><p>${esc(t)}</p></div>`).join("")}</div>
+  </section>
+
+  <section class="card">
+    <div class="eyebrow">6 | Interview preparation</div>
+    <h2>Questions to prepare for</h2>
+    <p class="small muted">Interviewers often use assessment results to decide what to probe. Based on your results, expect questions like these.</p>
+    <ol class="qs">${questions(R).map(q => `<li>${esc(q)}</li>`).join("")}</ol>
+  </section>
+
+  <section class="card">
+    <div class="eyebrow">7 | Reflection</div>
+    <h2>Make sense of your results</h2>
+    <label class="field" for="r1">Which two results best support your application for this role, and why?<textarea id="r1" data-r="r1">${esc(state.reflect.r1)}</textarea></label>
+    <label class="field" for="r2">Which result might concern this employer? What evidence would you give to address it?<textarea id="r2" data-r="r2">${esc(state.reflect.r2)}</textarea></label>
+    <label class="field" for="r3">Write one STAR story (Situation, Task, Action, Result) for your strongest competency.<textarea id="r3" data-r="r3" style="min-height:150px">${esc(state.reflect.r3)}</textarea></label>
+    <div class="btns"><button type="button" data-act="pdf">Download PDF report</button><span class="small muted">Your reflection saves automatically in this browser.</span></div>
+  </section>
+
+  <p class="note">About this report: this is a training simulation, not a validated psychometric or selection instrument, and it says nothing about your mental health. Work-style items come from the International Personality Item Pool (IPIP Big-Five Factor Markers, Goldberg 1992), which is in the public domain. The scenarios and reasoning questions were written for this exercise.</p>
+  ${SAMPLE ? "" : `<div class="btns" id="reset-zone"><button type="button" class="quiet" data-act="reset">Start a new attempt</button></div>`}`;
+  useHandoff();
+}
+
+/* ---------- PDF ---------- */
+const clean = s => String(s).replace(/[‘’]/g, "'").replace(/[“”]/g, '"').replace(/[–—]/g, "-").replace(/…/g, "...").replace(/[^\x09\x0A\x0D\x20-\x7E -ÿ]/g, "");
+
+function buildPdf() {
+  const R = compute(), P = state.profile;
+  const doc = new window.jspdf.jsPDF({ unit: "mm", format: "a4" });
+  const M = 18, W = 210, H = 297, CW = W - 2 * M, PT = 0.3528;
+  const INK = [21, 32, 27], MUTED = [86, 103, 95], ACC = [29, 106, 85], LINE = [214, 223, 218], SOFT = [242, 245, 243];
+  const STAT_C = { strong: [35, 120, 74], some: [168, 106, 18], build: [178, 63, 43], high: [35, 120, 74], mid: [168, 106, 18], low: [178, 63, 43] };
+  let y = M;
+  const ensure = h => { if (y + h > H - 20) { doc.addPage(); y = M; } };
+  function text(t, o = {}) {
+    const size = o.size || 10, x = o.x || M, w = o.w || CW, lh = o.lh || 1.4;
+    doc.setFont("helvetica", o.style || "normal"); doc.setFontSize(size); doc.setTextColor(...(o.color || INK));
+    const lines = doc.splitTextToSize(clean(t), w), step = size * PT * lh;
+    lines.forEach(l => { ensure(step); doc.text(l, x, y + size * PT * 0.9); y += step; });
+    y += o.after || 0;
+  }
+  function heading(t, eyebrow) {
+    ensure(22); y += 5;
+    if (eyebrow) text(eyebrow.toUpperCase(), { size: 7.5, style: "bold", color: MUTED, lh: 1.2 });
+    text(t, { size: 14, style: "bold", color: ACC, lh: 1.25 });
+    doc.setDrawColor(...LINE); doc.setLineWidth(0.3); doc.line(M, y + 0.5, W - M, y + 0.5); y += 4;
+  }
+  const label = t => text(t.toUpperCase(), { size: 7.5, style: "bold", color: MUTED, lh: 1.3 });
+  function bullet(t, o = {}) {
+    const size = o.size || 10; ensure(size * PT * 1.4);
+    doc.setFont("helvetica", "normal"); doc.setFontSize(size); doc.setTextColor(...INK);
+    doc.text(o.mark || "-", M + 1, y + size * PT * 0.9);
+    text(t, { x: M + 7, w: CW - 7, size, after: o.after == null ? 1.2 : o.after });
+  }
+  function pill(t, color, x, yy) {
+    doc.setFont("helvetica", "bold"); doc.setFontSize(8);
+    const w = doc.getTextWidth(t) + 5;
+    doc.setFillColor(...color); doc.roundedRect(x - w, yy - 3.6, w, 5, 2.5, 2.5, "F");
+    doc.setTextColor(255, 255, 255); doc.text(t, x - w + 2.5, yy);
+  }
+
+  // cover band
+  doc.setFillColor(...ACC); doc.rect(0, 0, W, 44, "F");
+  doc.setTextColor(255, 255, 255);
+  doc.setFont("helvetica", "bold"); doc.setFontSize(8); doc.text("PRE-INTERVIEW ASSESSMENT | CANDIDATE REPORT", M, 14);
+  doc.setFontSize(22); doc.text(clean(P.name || "Candidate"), M, 26);
+  doc.setFont("helvetica", "normal"); doc.setFontSize(10);
+  doc.text(clean(`${P.role || "Role not stated"}${P.company ? " | " + P.company : ""}`), M, 34);
+  doc.text(clean(`${P.programme ? P.programme + " | " : ""}${state.date} | ${state.id}`), M, 39.5);
+  doc.setFontSize(7.5); doc.text(clean(CREDIT), W - M, 14, { align: "right" });
+  y = 54;
+
+  // summary
+  label("At a glance");
+  const boxes = [["Lead with", `${TRAITS[R.top[0]].name}`, `and ${TRAITS[R.top[1]].name.toLowerCase()}`], ["Judgement", `${R.sjtTotal}/16`, "scenario points"], ["Numerical", `${R.apt.c.correct}/8`, `${fmt(R.apt.c.used)} used`], ["Verbal", `${R.apt.d.correct}/8`, `${fmt(R.apt.d.used)} used`]];
+  const bw = (CW - 9) / 4;
+  boxes.forEach((b, i) => {
+    const x = M + i * (bw + 3);
+    doc.setFillColor(...SOFT); doc.setDrawColor(...LINE); doc.roundedRect(x, y, bw, 22, 2, 2, "FD");
+    doc.setFont("helvetica", "bold"); doc.setFontSize(7); doc.setTextColor(...MUTED); doc.text(b[0].toUpperCase(), x + 3, y + 5.5);
+    doc.setFontSize(i === 0 ? 9.5 : 15); doc.setTextColor(...INK); doc.text(doc.splitTextToSize(clean(b[1]), bw - 6)[0], x + 3, y + 13);
+    doc.setFont("helvetica", "normal"); doc.setFontSize(7.5); doc.setTextColor(...MUTED); doc.text(doc.splitTextToSize(clean(b[2]), bw - 6)[0], x + 3, y + 18.5);
+  });
+  y += 28;
+  text(`Area to develop: ${TRAITS[R.grow].name}. ${TRAITS[R.grow][R.traits[R.grow].band].watch}`, { size: 9.5, color: INK, after: 1 });
+
+  // work style
+  heading("Work-style profile", "1 | Work style");
+  text("Bars show your average score (1 to 5). The dark tick marks the average of 10,189 people who took the same questionnaire online. Higher or Lower means more than half a point from that average. No profile is better than another.", { size: 8.5, color: MUTED, after: 3 });
+  TRAIT_ORDER.forEach(t => {
+    const T = TRAITS[t], r = R.traits[t], c = T[r.band];
+    ensure(52);
+    doc.setFont("helvetica", "bold"); doc.setFontSize(11); doc.setTextColor(...INK);
+    doc.text(clean(T.name), M, y + 4);
+    const nameW = doc.getTextWidth(clean(T.name));
+    doc.setFont("helvetica", "normal"); doc.setFontSize(8.5); doc.setTextColor(...MUTED);
+    doc.text(clean(T.tech), M + nameW + 3, y + 4);
+    pill(`${BAND_LABEL[r.band]} | ${r.mean.toFixed(1)}/5`, STAT_C[r.band], W - M, y + 4);
+    y += 7;
+    const bx = M, bwid = CW;
+    doc.setFillColor(...SOFT); doc.setDrawColor(...LINE); doc.roundedRect(bx, y, bwid, 3.6, 1.8, 1.8, "FD");
+    doc.setFillColor(...ACC); doc.roundedRect(bx, y, Math.max(3.6, bwid * (r.mean - 1) / 4), 3.6, 1.8, 1.8, "F");
+    const rx = bx + bwid * (T.ref - 1) / 4; doc.setDrawColor(...INK); doc.setLineWidth(0.7); doc.line(rx, y - 1.4, rx, y + 5); doc.setLineWidth(0.3);
+    y += 8;
+    text(c.look, { size: 9.5, after: 1 });
+    label("Strengths to lead with"); text(c.str, { size: 9.5, after: 1 });
+    label("Watch-outs"); text(c.watch, { size: 9.5, after: 1 });
+    label("Try this"); text(c.dev, { size: 9.5, after: 4 });
+  });
+
+  // job fit
+  heading(`Evidence for ${P.role || "your target role"}`, "2 | Job fit");
+  text("Competencies you identified in the job advert, checked against today's results. 'Build evidence' means today's assessment did not show it, so your interview examples need to.", { size: 8.5, color: MUTED, after: 3 });
+  (R.selected.length ? R.selected : R.comps).forEach(c => {
+    ensure(20);
+    doc.setFont("helvetica", "bold"); doc.setFontSize(10.5); doc.setTextColor(...INK); doc.text(clean(c.name), M, y + 4);
+    pill(STATUS_LABEL[c.status], STAT_C[c.status], W - M, y + 4);
+    y += 6.5;
+    text(`${c.source}; ${c.traitNote}`, { size: 8.5, color: MUTED });
+    text(`Prepare a STAR story about ${c.star}.`, { size: 9.5, after: 3 });
+  });
+
+  // sjt + aptitude
+  heading("Situational judgement and reasoning", "3 | Judgement and aptitude");
+  text(`Situational judgement: ${R.sjtTotal}/16.`, { size: 10.5, style: "bold" });
+  SJT.forEach((s, i) => bullet(`${s.title} (${COMPS.find(c => c.id === s.comp).name}): ${R.sjt[i].pts}/2`, { size: 9.5, after: 0.4 }));
+  y += 3;
+  ["c", "d"].forEach(k => { const r = R.apt[k];
+    text(`${TIMED[k].label}: ${r.correct}/${r.n} correct, ${r.attempted} answered, ${fmt(r.used)} of ${fmt(TIMED[k].secs)} used${r.timedOut ? ", time ran out" : ""}.`, { size: 10.5, style: "bold" });
+    text(aptInsight(r), { size: 9.5, after: 3 }); });
+
+  // plan + questions
+  heading("Your 30-day development plan", "4 | Next steps");
+  plan(R).forEach(([w, t]) => { ensure(14); text(w.toUpperCase(), { size: 8, style: "bold", color: ACC, lh: 1.3 }); text(t, { size: 9.5, after: 2.5 }); });
+  heading("Questions to prepare for", "5 | Interview preparation");
+  questions(R).forEach((q, i) => bullet(q, { mark: `${i + 1}.`, size: 9.5, after: 1.5 }));
+
+  // reflection
+  heading("My reflection", "6 | Reflection");
+  [["Which two results best support my application, and why?", "r1"], ["Which result might concern this employer, and what evidence addresses it?", "r2"], ["My STAR story for my strongest competency", "r3"]].forEach(([q, k]) => {
+    label(q); text(state.reflect[k].trim() || "(Not completed)", { size: 9.5, color: state.reflect[k].trim() ? INK : MUTED, after: 3 });
+  });
+
+  // interviewer page
+  doc.addPage(); y = M;
+  heading("Interviewer notes", "For the mock interview panel");
+  text(`Candidate: ${P.name} | ${P.role || "Role not stated"}${P.company ? " at " + P.company : ""} | ${state.id}`, { size: 9.5, after: 3 });
+  label("Suggested probes from this report");
+  questions(R).slice(1, 5).forEach((q, i) => bullet(q, { mark: `${i + 1}.`, size: 9.5, after: 1 }));
+  y += 4;
+  const rubric = ["Opening and motivation for the role", "Evidence for job competencies (STAR)", "Self-awareness: discusses own results honestly", "Communication and professional presence", "Questions asked of the interviewer"];
+  label("Ratings (1 = needs work, 5 = excellent)");
+  rubric.forEach(r => {
+    ensure(9);
+    doc.setFont("helvetica", "normal"); doc.setFontSize(9.5); doc.setTextColor(...INK); doc.text(clean(r), M, y + 4);
+    for (let n = 0; n < 5; n++) { const x = W - M - 5 * 9 + n * 9; doc.setDrawColor(...LINE); doc.rect(x, y, 6, 6); doc.setFontSize(7); doc.setTextColor(...MUTED); doc.text(String(n + 1), x + 2.1, y + 4.3); }
+    y += 9;
+  });
+  y += 4; label("Notes and feedback");
+  doc.setDrawColor(...LINE);
+  while (y < H - 28) { y += 8; doc.line(M, y, W - M, y); }
+
+  // footer
+  const pages = doc.getNumberOfPages();
+  for (let i = 1; i <= pages; i++) {
+    doc.setPage(i); doc.setFont("helvetica", "bold"); doc.setFontSize(7.5); doc.setTextColor(...INK);
+    doc.text(clean(CREDIT), M, H - 14);
+    doc.setFont("helvetica", "normal"); doc.setFontSize(7); doc.setTextColor(...MUTED);
+    doc.text(clean(`Training simulation, not a validated selection instrument. Work-style items: IPIP Big-Five Factor Markers (Goldberg, 1992), public domain.`), M, H - 10);
+    doc.text(`Page ${i} of ${pages}`, W - M, H - 10, { align: "right" });
+  }
+  return doc;
+}
+
+function reportText() {
+  const R = compute(), P = state.profile;
+  const L = [`PRE-INTERVIEW ASSESSMENT REPORT`, `${P.name} | ${P.role}${P.company ? " at " + P.company : ""} | ${state.date} | ${state.id}`, "",
+    `Judgement ${R.sjtTotal}/16 | Numerical ${R.apt.c.correct}/8 | Verbal ${R.apt.d.correct}/8`, "", "WORK STYLE"];
+  TRAIT_ORDER.forEach(t => { const r = R.traits[t], c = TRAITS[t][r.band]; L.push(`${TRAITS[t].name}: ${BAND_LABEL[r.band]} (${r.mean.toFixed(1)}/5). ${c.look} Strengths: ${c.str} Watch-outs: ${c.watch} Try this: ${c.dev}`); });
+  L.push("", "JOB FIT"); (R.selected.length ? R.selected : R.comps).forEach(c => L.push(`${c.name}: ${STATUS_LABEL[c.status]}. Prepare a STAR story about ${c.star}.`));
+  L.push("", "30-DAY PLAN"); plan(R).forEach(([w, t]) => L.push(`${w}: ${t}`));
+  L.push("", "QUESTIONS TO PREPARE FOR"); questions(R).forEach((q, i) => L.push(`${i + 1}. ${q}`));
+  L.push("", "REFLECTION", state.reflect.r1, "", state.reflect.r2, "", state.reflect.r3, "", CREDIT);
+  return L.join("\n");
+}
+
+async function downloadPdf(btn) {
+  const msg = document.getElementById("pdf-msg");
+  const say = (t, ok) => { if (msg) { msg.textContent = t; msg.className = ok ? "msg ok" : "msg"; } };
+  if (!window.jspdf) { say("The PDF tool didn't load. Check your internet connection and reload the page. Your answers are saved."); return; }
+  const filename = `Assessment report - ${(state.profile.name || "candidate").replace(/[^\w .-]/g, "").trim()}.pdf`;
+  btn.disabled = true; say("Preparing your PDF...", true);
+  try {
+    const doc = buildPdf();
+    const dl = await dlReady;
+    if (dl) {
+      try { await dl.save({ filename, data: doc.output("blob") }); say("PDF saved.", true); }
+      catch (e) { say(e && e.code === "declined" ? "Download cancelled." : "This view couldn't save the file. Use 'Copy report as text' instead, or ask your lecturer for the offline version."); }
+    } else if (dl === null && window.top !== window.self) {
+      say("This view doesn't allow downloads. Use 'Copy report as text', or ask your lecturer for the offline version of this assessment.");
+    } else { doc.save(filename); say("Your PDF is downloading.", true); }
+  } catch (e) { say("Something went wrong creating the PDF. Reload the page and try again; your answers are saved."); }
+  btn.disabled = false;
+}
+
+/* ---------- events ---------- */
+app.addEventListener("change", e => {
+  const t = e.target, n = t.name || "";
+  let m;
+  if ((m = n.match(/^a-(\d+)$/))) { state.a[+m[1]] = +t.value; const c = document.getElementById("a-count"); if (c) c.textContent = Object.keys(state.a).length; }
+  else if ((m = n.match(/^b-(\d+)-(most|least)$/))) {
+    const i = +m[1], kind = m[2], other = kind === "most" ? "least" : "most";
+    state.b[i] = state.b[i] || {}; state.b[i][kind] = +t.value;
+    if (state.b[i][other] === +t.value) { delete state.b[i][other]; const o = app.querySelector(`input[name="b-${i}-${other}"][value="${t.value}"]`); if (o) o.checked = false; }
+  }
+  else if ((m = n.match(/^([cd])-(\d+)$/))) { if (!state[m[1]].done) state[m[1]].answers[+m[2]] = +t.value; }
+  else return;
+  save();
+});
+app.addEventListener("input", e => { const k = e.target.dataset && e.target.dataset.r; if (k) { state.reflect[k] = e.target.value; save(); } });
+
+app.addEventListener("submit", e => {
+  if (e.target.id !== "intro-form") return;
+  e.preventDefault();
+  const v = id => document.getElementById(id).value.trim();
+  const comps = [...app.querySelectorAll('input[name="comp"]:checked')].map(i => i.value);
+  const msg = document.getElementById("intro-msg");
+  if (!v("f-name") || !v("f-role")) { msg.textContent = "Add your name and the job title you applied for."; return; }
+  if (comps.length < 3 || comps.length > 5) { msg.textContent = `Choose 3 to 5 competencies from the job advert (you have ${comps.length}).`; return; }
+  state.profile = { name: v("f-name"), programme: v("f-prog"), role: v("f-role"), company: v("f-co"), comps };
+  if (!state.id) state.id = "CR-" + String(Date.now() % 100000).padStart(5, "0");
+  state.date = new Date().toLocaleDateString("en-GB", { day: "numeric", month: "long", year: "numeric" });
+  state.step = "A"; save(); render(); window.scrollTo(0, 0);
+});
+
+app.addEventListener("click", e => {
+  const h = e.target.closest("a[data-handoff]"); if (h) { h.href = handoffUrl(); return; }
+  const b = e.target.closest("button[data-act]"); if (!b) return;
+  const act = b.dataset.act;
+  if (act === "a-next") {
+    const start = state.aPage * PAGE_SIZE, end = Math.min(start + PAGE_SIZE, ITEMS.length);
+    const missing = []; for (let i = start; i < end; i++) if (!state.a[i]) missing.push(i + 1);
+    if (missing.length) { document.getElementById("a-msg").textContent = `Answer every statement on this page first (missing: ${missing.join(", ")}).`; return; }
+    if (end >= ITEMS.length) state.step = "B"; else state.aPage++;
+    save(); render(); window.scrollTo(0, 0);
+  } else if (act === "a-back") { state.aPage = Math.max(0, state.aPage - 1); save(); render(); window.scrollTo(0, 0); }
+  else if (act === "b-submit") {
+    const missing = SJT.map((s, i) => i).filter(i => !state.b[i] || state.b[i].most === undefined || state.b[i].least === undefined).map(i => i + 1);
+    if (missing.length) { document.getElementById("b-msg").textContent = `Choose a most and a least effective response for scenario ${missing.join(", ")}.`; return; }
+    state.step = "c"; save(); render(); window.scrollTo(0, 0);
+  } else if (act === "timed-start") {
+    const p = state[state.step]; p.startedAt = Date.now(); p.deadline = p.startedAt + TIMED[state.step].secs * 1000;
+    save(); render(); window.scrollTo(0, 0);
+  } else if (act === "timed-submit") finishTimed(state.step, false);
+  else if (act === "pdf") downloadPdf(b);
+  else if (act === "leave-sample") { SAMPLE = false; try { history.replaceState(null, "", location.pathname + location.search); } catch (err) {} load(); render(); window.scrollTo(0, 0); }
+  else if (act === "copy") {
+    const t = reportText(), msg = document.getElementById("pdf-msg");
+    navigator.clipboard.writeText(t).then(() => { msg.textContent = "Report copied. Paste it into a document."; msg.className = "msg ok"; })
+      .catch(() => { msg.textContent = "Copying isn't available here. Select the report text on this page and copy it manually."; msg.className = "msg"; });
+  } else if (act === "reset") {
+    document.getElementById("reset-zone").innerHTML = `<span class="small">This deletes your answers and report from this browser. Download your PDF first.</span><button type="button" class="danger" data-act="reset-yes">Delete and start again</button><button type="button" class="quiet" data-act="reset-no">Keep my report</button>`;
+  } else if (act === "reset-yes") { state = blank(); save(); render(); window.scrollTo(0, 0); }
+  else if (act === "reset-no") render();
+});
+
+render();
+</script>
+
+</body>
+</html>
