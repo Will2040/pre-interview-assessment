@@ -377,8 +377,14 @@ function useHandoff() {
       a.textContent = "Open PDF download page"; a.dataset.handoff = "1";
       btn.replaceWith(a);
     });
+    const copy = document.querySelector('button[data-act="copy"]');
+    if (copy && !document.querySelector('button[data-act="copy-link"]')) {
+      const c = document.createElement("button");
+      c.type = "button"; c.className = "ghost"; c.dataset.act = "copy-link"; c.textContent = "Copy download page link";
+      copy.before(c);
+    }
     const msg = document.getElementById("pdf-msg");
-    if (msg) { msg.className = "msg ok"; msg.textContent = "This link can't save files directly, so your report opens in a new tab with your answers carried over. Press Download PDF report there."; }
+    if (msg) { msg.className = "msg ok"; msg.textContent = "This link can't save files directly, so your report opens in a new tab with your answers carried over. Press Download PDF report there. If no tab opens, copy the download page link and paste it into your browser's address bar."; }
   });
 }
 
@@ -954,6 +960,11 @@ app.addEventListener("click", e => {
     save(); render(); window.scrollTo(0, 0);
   } else if (act === "timed-submit") finishTimed(state.step, false);
   else if (act === "pdf") downloadPdf(b);
+  else if (act === "copy-link") {
+    const msg = document.getElementById("pdf-msg"), url = handoffUrl();
+    navigator.clipboard.writeText(url).then(() => { msg.textContent = "Link copied. Paste it into your browser's address bar, then press Download PDF report."; msg.className = "msg ok"; })
+      .catch(() => { msg.innerHTML = `Copying isn't available here. Select this whole link and copy it:<br><textarea readonly style="min-height:70px;margin-top:6px">${esc(url)}</textarea>`; msg.className = "msg"; const t = msg.querySelector("textarea"); if (t) { t.focus(); t.select(); } });
+  }
   else if (act === "leave-sample") { SAMPLE = false; try { history.replaceState(null, "", location.pathname + location.search); } catch (err) {} load(); render(); window.scrollTo(0, 0); }
   else if (act === "copy") {
     const t = reportText(), msg = document.getElementById("pdf-msg");
